@@ -13,7 +13,10 @@ public class Answer implements Serializable{
 	private String item;
 	private String answer;
 	private Long quesId;
-	private String type;//0 单选  1多选
+	/**
+	 *  0 单选  1多选
+	 */
+	private String type;
 	public Long getId() {
 		return id;
 	}

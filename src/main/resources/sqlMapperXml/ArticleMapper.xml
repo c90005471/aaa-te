@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.ArticleMapper">
+	
+	<insert id="add" parameterType="article">
+		insert into article values(null,#{title},#{keyword},#{myEditor},#{author},#{time})
+	</insert>
+	<select id="selectAll" resultType="map">
+		select * from article
+	</select>
+	<select id="selectOne" resultType="map" parameterType="string">
+		select * from article where id=#{id}
+	</select>
+	
+	<update id="del" parameterType="string">
+		<![CDATA[
+			delete from article where id in (${id})
+		]]>
+	</update>
+	<update id="update" parameterType="article">
+		update article set title=#{title},author=#{author},content=#{myEditor},keyword=#{keyword} where id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TopicTypesMapper">
+	
+    <select id="selectTopicTypePage" resultType="Map">
+        SELECT t.id,t.typename,t.typestate from topic_types t
+        <where> 1=1
+        	<if test=" stage != null and stage != '' ">
+               and  t.stage = #{stage}
+            </if>
+            <if test=" typename != null and typename != '' ">
+               and  t.typename like concat(concat('%',#{typename}),'%')
+            </if>
+            <if test=" typename != null and typename != '' ">
+               and  t.typename like concat(concat('%',#{typename}),'%')
+            </if>
+            <if test=" typestate != null ">
+               and  t.typestate = #{typestate}
+            </if>
+        </where>
+        order BY t.id
+    </select>
+    <select id="selectTypeAndSum" parameterType="String" resultType="Map">
+        SELECT t.id,t.typename,(select count(m.id) from topic_info m where m.topicstate=1 and t.id = m.topictype) sum from topic_types t
+        where t.typestate = 1 and t.stage=#{stage}
+        order BY t.id
+    </select>
+</mapper>

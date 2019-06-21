@@ -1,0 +1,11 @@
+.middle-top{
+    width: 100%;
+    border: 1px solid white;
+    height: 50px;
+    border-bottom: 1px solid #CCC;
+    background:#2D3339; 
+}
+.middle-top-right a div:hover{
+    background: #2D3339;
+    color: red;
+}

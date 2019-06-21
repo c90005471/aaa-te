@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TestQuestionRecordMapper">
+
+    <select id="selectTestQuestionRecordPage" resultType="Map">
+        SELECT 
+        t.id, t.stuname,t.stuphone,t.stuscore,t.questype,t.createtime from testquestion_record t
+        <where>
+            <if test=" stuname != null and stuname != '' ">
+                t.stuname like concat(concat('%',#{stuname}),'%')
+            </if>
+            <if test=" stuphone != null and stuphone != '' ">
+                t.stuphone = #{stuphone}
+            </if>
+        </where>
+        GROUP BY t.id
+    </select>
+</mapper>

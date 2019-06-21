@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclRecordInsertMapper">
+	
+	<!-- 向tblsclRecord表中插入数据，心理健康测试记录 -->
+	<!-- useGeneratedKeys="true" keyProperty="id" -->
+	<insert id="insertTblSclRecord"  parameterType="com.aaa.model.TblSclRecord">
+	  	insert into tbl_scl_record(studentid,sunCount,sclScore,createtime) values(#{studentId},#{sunCount},#{sclScore},'${createtime}')
+	</insert>
+	
+	<!-- 求当前学生的心理测试总分 -->
+	<select id="selectTblSclScore" parameterType="map" resultType="Map">
+		select sum(scoreDetail) AS scoresum from tbl_scl_recorddetail
+		<where>
+			1=1
+			<if test="studentid != null">
+				and studentid=#{studentid}
+			</if>
+			<if test="createtime != null">
+				<![CDATA[ and createtime like '%${createtime}%'  ]]>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 求当前学生的心理测试阳性项目个数 -->
+	<select id="selectTblSclCount" parameterType="map" resultType="Map">
+		select count(*) AS negacount from tbl_scl_recorddetail where scoreDetail>1
+		<if test="studentid != null">
+			and studentid=#{studentid}
+		</if>
+		<if test="createtime != null">
+			<![CDATA[ and createtime like '%${createtime}%'  ]]>
+		</if>
+	</select>
+</mapper>

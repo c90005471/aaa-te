@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TeacherDetailMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TeacherDetail">
+		<id column="id" property="id" />
+		<result column="sessionid" property="sessionid" />
+		<result column="questionid" property="questionid" />
+		<result column="score" property="score" />
+		<result column="submitime" property="submitime" />
+		<result column="teatestid" property="teatestid" />
+	</resultMap>
+  <select id="selectByplanidAndclassid" parameterType="java.lang.Long" resultType="map">
+  	select * from (select * from teacherplan where code=#{code}) ttt left join user u on ttt.teacherno=u.id
+  </select>
+  <!-- <select id="selectAvgscoreByplanid" parameterType="map" resultType="map">
+	select sss.*,c.course_name from (select avg(s.score) as avgscore, topicid from stu_evaluate s where  s.planid=#{planid} group by s.topicid) sss ,course c where sss.topicid=c.id;
+  </select> -->
+  <select id="selectByplanid" parameterType="map" resultType="map">
+  	select td.*,tq.questionname from teacherdetail td ,teacherquestion tq where  td.questionid=tq.id and td.teatestid=#{planid}
+  </select>
+  <!-- 查询每个考核点的平均分 -->
+   <select id="selectAvgscoreByplanid" parameterType="map" resultType="map">
+	select sss.*,q.questionname from (select avg(s.score) as avgscore, questionid from teacherdetail s where  s.teatestid=#{planid} group by s.questionid) sss ,teacherquestion q where sss.questionid=q.id
+  </select> 
+   <!-- 获取所有的学生数量 -->
+   <select id="selectByteacherSum" parameterType="java.lang.Long" resultType="map">
+  	SELECT
+	COUNT(s.stuno) AS sum,
+	l.classname AS classname
+	FROM student s LEFT JOIN tbl_class l ON s.class_id = l.id WHERE
+	s.class_id = (SELECT t.classid FROM teacherplan t WHERE t.id = #{id}) GROUP BY s.class_id
+  </select>
+   <!-- 获取所有参加评价的学生数量 -->
+  <select id="selectByStuSum" parameterType="map" resultType="map">
+  	SELECT COUNT(DISTINCT t.sessionid) AS count ,u.`name` AS name 
+  	FROM (select DISTINCT m.sessionid,m.teatestid from teacherdetail m where m.teatestid =#{id}  LIMIT 0,#{rade}) t
+  	LEFT JOIN teacherplan p ON t.teatestid=p.id LEFT JOIN `user` u ON p.teacherno=u.id 
+  	GROUP BY t.teatestid 
+  </select>
+</mapper>

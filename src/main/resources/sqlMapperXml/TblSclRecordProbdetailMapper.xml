@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclRecordProbdetailMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblSclRecorddetail">
+		<id column="id" property="id" />
+		<result column="studentid" property="studentid" />
+		<result column="sclid" property="sclid" />
+		<result column="scoreDetail" property="scoreDetail" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+	<select id="selectTblSclRecordProbDetailPage" resultType="Map">
+		SELECT
+		td.id,s.stuno,s.stuname,t.item,td.scoreDetail
+		FROM
+		tbl_scl_recorddetail td
+		left join tbl_scl t on td.sclid=t.id
+		left join student s on s.id=td.studentid
+		<where>
+			1=1
+			<if test="studentid != null">
+				and td.studentid=#{studentid}
+			</if>
+			<if test="createtime != null">
+				and td.createtime like '%${createtime}%'
+				<![CDATA[ and td.createtime like '%${createtime}%'  ]]>
+			</if>
+		</where>
+		order BY td.scoreDetail desc
+	</select>
+	<select id="selectTblSclRecordProbInterview" resultType="Map">
+		SELECT
+		t.id id,s.stuname stuname,u.name name,t.createtime createtime,t.record record
+		FROM tbl_scl_interview t
+		LEFT JOIN student s ON s.id=t.studentid
+		LEFT JOIN user u ON u.id=t.userid
+		<where>
+			1=1
+			<if test="studentid != null">
+				and t.studentid=#{studentid}
+			</if>
+		</where>
+		order BY t.id
+	</select>
+</mapper>

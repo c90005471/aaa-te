@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TestQuestionMapper">
+
+    <select id="selectTestQuestionPage" resultType="Map">
+        SELECT 
+        t.id, t.quesname,t.questype,t.type from testquestion t
+        <where>
+            <if test=" quesname != null and quesname != '' ">
+                t.quesname like concat(concat('%',#{quesname}),'%')
+            </if>
+            <if test=" questype != null and questype != '' ">
+                t.questype = #{questype}
+            </if>
+        </where>
+        GROUP BY t.id
+    </select>
+	<insert id="insertTestQues"  useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.TestQuestion">
+	  	insert into testquestion (quesname,quesanswer,questype,type,createtime) values (#{quesname},#{quesanswer},#{questype},#{type},#{createtime})
+	 </insert>
+</mapper>

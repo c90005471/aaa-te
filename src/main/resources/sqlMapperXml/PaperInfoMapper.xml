@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.PaperInfoMapper">
+    <select id="selectPaperInfoPage" resultType="Map">
+        select  t.id,p.topicname from paper_info t
+        left join topic_info p on p.id = t.infoid
+        <where>
+        	<if test="paperid!=null">
+        		t.paperid = #{paperid}
+        	</if>
+        </where>
+        order by t.id
+    </select>
+</mapper>

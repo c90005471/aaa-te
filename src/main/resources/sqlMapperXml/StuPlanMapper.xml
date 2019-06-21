@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.StuPlanMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.StuPlan">
+		<id column="id" property="id" />
+		<result column="chapterid" property="chapterid" />
+		<result column="begintime" property="begintime" />
+		<result column="endtime" property="endtime" />
+		<result column="classid" property="classid" />
+		<result column="createuserid" property="createuserid" />
+		<result column="dostatus" property="dostatus" />
+	</resultMap>
+ <select id="selectPlanStuPage" resultType="Map">
+        <!-- SELECT 
+        t.*,c.classname,u.name,co.course_name
+        FROM stu_plan t,tbl_class c,user u,course co 
+        <where>
+             t.chapterid=co.id
+             and t.classid=c.id
+             and t.createuserid=u.id
+            <if test=" classid != null ">
+               and  t.classid = #{classid}
+            </if>
+            <if test=" begintime != null ">
+                <![CDATA[ and t.begintime>= #{begintime} ]]>
+            </if>
+            <if test=" endtime != null ">
+                <![CDATA[ and t.endtime <= #{endtime} ]]>
+            </if>
+        </where>
+        GROUP BY t.createtime -->
+        <!-- select sss.*,c.course_name from (SELECT t.id,t.chapterid,t.begintime,t.endtime,t.createuserid,t.createtime,t.classid,t.`dostatus`,c.classname,u.`name` FROM stu_plan t,tbl_class c,`user` u WHERE t.classid=c.id and t.createuserid=u.id and t.classid =#{classid} GROUP BY t.createtime ORDER BY t.id ASC) sss ,course c where sss.chapterid =c.id --> 
+        select sss.*,c.course_name coursename from 
+        	(SELECT t.id,t.chapterid,t.begintime,t.endtime,t.createuserid,t.createtime,t.classid,t.`dostatus`,t.score,c.classname,u.`name`,
+        	h.name teachername 
+        	FROM stu_plan t
+        	left join tbl_class c on t.classid=c.id
+        	left join `user` u on t.createuserid=u.id 
+        	left join organization o on c.orgid = o.id
+        	left join user h on h.id = t.teacherno
+        	WHERE  c.graduate = 0 <!-- 状态 未毕业-->
+        	<if test=" classid != null ">
+        		and t.classid =#{classid}  
+        	</if>
+        	<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+        	ORDER BY t.id ASC) sss ,course c 
+        	where sss.chapterid =c.id 
+        	<!-- 不输入时间查询时，默认当前月份 -->
+        	<if test=" flag != null ">
+                 and DATE_FORMAT(sss.endtime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+        	<!-- 添加条件结束时间在 一个时间段  -->
+            <if test=" begintime != null ">
+                <![CDATA[ and sss.begintime>= DATE_FORMAT(#{begintime},'%Y-%m-%d') ]]>
+            </if>
+            <if test=" endtime != null ">
+                <![CDATA[ and sss.endtime <= DATE_FORMAT(#{endtime},'%Y-%m-%d') ]]>
+            </if>
+            <if test=" courseType != null ">
+                and  find_in_set(c.course_type,#{courseType})
+            </if>
+            
+    </select>
+    <select id="selectPlanStuList" resultType="Map"   parameterType="Map">
+    	select t.id,c.course_type coursetype from stu_plan t 
+    		left join course c on t.chapterid = c.id
+    		where 1=1
+    		<if test=" id != null ">
+                and t.id = #{id}
+            </if>
+    </select>
+</mapper>

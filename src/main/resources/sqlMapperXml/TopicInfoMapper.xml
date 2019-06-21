@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TopicInfoMapper">
+	
+	<insert id="insertTopicInfo"  useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.TopicInfo">
+	  	insert into topic_info (topicname,topictype,correct,score,decipher,type,creator,createtime) values (#{topicname},#{topictype},#{correct},#{score},#{decipher},#{type},#{creator},#{createtime})
+	 </insert>
+    <select id="selectTopicInfoPage" resultType="Map">
+        SELECT 
+        t.id,t.topicname,s.typename,t.correct,t.type,t.decipher,u.name teachername from topic_info t
+        left join user u on u.id = t.creator 
+        left join topic_types s on s.id = topictype 
+        <where> 1=1
+            <if test=" topicname != null and topicname != '' ">
+                and t.topicname like concat(concat('%',#{topicname}),'%')
+            </if>
+            <if test=" topictype != null">
+                and t.topictype =#{topictype}
+            </if>
+            <if test=" topicstate != null">
+                and t.topicstate =#{topicstate}
+            </if>
+        </where>
+        order BY t.id desc
+    </select>
+    <!-- 根据科目id  随机抽取sum道试题 -->
+    <select id="selectInfoByTypeIdAndSum" parameterType="map" resultType="com.aaa.model.TopicInfo">
+    	SELECT t.id,t.topictype FROM topic_info t where topicstate =1 and t.topictype=#{topictype} ORDER BY  RAND() LIMIT #{sum}
+    </select>
+    
+    <select id="selectInfoByMap" parameterType="map" resultType="com.aaa.model.TopicInfo">
+    	select t.id,t.topicname,t.correct,t.score,t.type from topic_info t
+		left join paper_info p on p.infoid = t.id
+		<where>
+			<if test="paperId!=null">
+				p.paperid = #{paperId}
+			</if>
+		</where>
+    </select>
+</mapper>

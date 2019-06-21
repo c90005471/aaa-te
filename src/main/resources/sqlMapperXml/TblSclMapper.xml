@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblScl">
+		<id column="id" property="id" />
+		<result column="item" property="item" />
+		<result column="typeId" property="typeId" />
+	</resultMap>
+	<resultMap id="BaseTblResultMap" type="com.aaa.model.TblSclType">
+		<id column="id" property="id" />
+		<result column="typeName" property="typeName" />
+	</resultMap>
+	<select id="selectTblSclPage" resultType="map">
+		select ts.*,tt.typeName from tbl_scl ts,tbl_scl_type tt where ts.typeId=tt.id 
+			<if test="typeId != null and typeId != '' ">
+			    and	tt.id=#{typeId}
+			</if>
+			<if test="item != null and item != ''">
+				and item like concat(concat('%',#{item}),'%')
+			</if>
+	
+	</select>
+	<select id="selectById" parameterType="map" resultMap="BaseResultMap">
+		select id,item,typeId from tbl_scl where id=#{id}
+	</select>
+	<insert id="insert" parameterType="com.aaa.model.TblScl">
+		insert into tbl_scl values(#{id},#{item},#{typeId})
+	</insert>
+	<update id="updateById" parameterType="com.aaa.model.TblScl">
+		update tbl_scl set item=#{item},typeId=#{typeId} where id=#{id}
+	</update>
+	<select id="selectTblSclType" resultMap="BaseTblResultMap">
+		select * from tbl_scl_type
+	</select>
+	<select id="selectItemId" resultType="map">
+		select id from  tbl_scl
+		<where>
+			id=#{id}
+		</where>
+	</select>
+	<select id="selectLastId" resultType="Integer">
+		select id from tbl_scl order by id desc LIMIT 1
+	</select>
+</mapper>

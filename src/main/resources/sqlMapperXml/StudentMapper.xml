@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.StudentMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.Student">
+		<id column="id" property="id" />
+		<result column="stuno" property="stuno" />
+		<result column="stuname" property="stuname" />
+		<result column="idno" property="idno" />
+		<result column="phone" property="phone" />
+		<result column="address" property="address" />
+		<result column="qq" property="qq" />
+		<result column="class_id" property="classId" />
+	</resultMap>
+	 <select id="selectStudentPage" resultType="Map">
+		SELECT
+			t.*,c.classname,s.companyname,s.prosalary,s.forsalary,
+			(select count(*) from returnrecord r where r.student_id = t.id) returnsum
+		FROM
+			student t	
+			left join tbl_class c on t.class_id = c.id
+			left join organization o on c.orgid = o.id
+			left join student_company s on t.id = s.stuid
+        <where>
+        	1=1 
+            <if test=" id != null ">
+                 and t.class_id = #{id}
+            </if>
+            <if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" stuname != null ">
+                 and t.stuname  like concat(concat('%',#{stuname}),'%')
+            </if> 
+            <if test=" qq != null ">
+                 and t.qq like concat(concat('%',#{qq}),'%')
+            </if> 
+            <if test=" flag != null ">
+                 and c.graduate = #{flag}
+            </if> 
+        </where>
+        order BY t.id
+    </select>
+    
+	 <select id="selectStuById" resultType="Map" parameterType="Long">
+		SELECT
+			student.*, classname,over leaschooltime
+		FROM
+			student
+		JOIN tbl_class ON student.class_id = tbl_class.id
+		WHERE
+			student.id =#{id}
+    </select>
+    <select id="selectCapterByStuId" parameterType="Long" resultType="Map">
+    	select p.* from student s ,stu_plan p  where s.class_id=p.classId  and NOW() BETWEEN p.begintime and p.endtime and dostatus=0 
+    	 and p.id  not in (SELECT DISTINCT(planid) FROM stu_evaluate WHERE  stuid = #{id})<!-- 屏蔽已经做完的自评计划，解决同一时间段多个自评计划问题 -->
+    	 and s.id=#{id}  ORDER BY p.begintime limit 0,1
+    </select>
+    
+    <select id="getDegree" resultType="Map">
+    	SELECT * FROM culture
+    </select>
+    
+    <select id="getMajor" resultType="Map">
+    	SELECT * FROM schools
+    </select>
+    <select id="getClassById" resultType="Map" parameterType="Long">
+		SELECT
+			*
+		FROM
+			tbl_class
+		WHERE
+			tbl_class.orgid = (
+				SELECT
+					organization.id
+				FROM
+					student
+				JOIN tbl_class ON student.class_id = tbl_class.id
+				JOIN organization ON tbl_class.orgid = organization.id
+				WHERE
+					student.id = #{id}
+			)
+    </select>
+    
+    <select id="selectStudentVoList"  parameterType="Long"  resultType="com.aaa.model.vo.StudentVo" >
+		SELECT
+			t.*,c.classname,s.companyname,s.prosalary,s.forsalary,s.xphone
+		FROM
+			student t	
+			left join tbl_class c on t.class_id = c.id
+			left join student_company s on t.id = s.stuid
+        <where>
+        	1=1 
+            <if test="id != null ">
+                 and t.class_id = #{id}
+            </if>
+        </where>
+        order BY t.id
+    </select>
+    
+    <select id="fillAllColStu" resultType="Map" parameterType="String">
+		SELECT substr(s.idno,1,2) area,count(*) count 
+		from student s,tbl_class c,organization o 
+		WHERE s.class_id=c.id and c.orgid=o.id and o.id=#{orgid} group by area
+    </select>
+    <select id="fillAllHighStu" resultType="Map" parameterType="String">
+    	SELECT  substr(s.idno,3,2) city,count(*) count 
+    	from student s,tbl_class c,organization o 
+    	WHERE s.class_id=c.id and c.orgid=o.id and o.id not in(#{orgid}) 
+    	and LENGTH(s.idno)=18  and s.idno like '41%' 
+    	group by city
+    </select>
+    
+</mapper>

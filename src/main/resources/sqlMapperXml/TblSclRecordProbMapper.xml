@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclRecordProbMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblSclRecord">
+		<id column="id" property="id" />
+		<result column="studentId" property="studentId" />
+		<result column="sunCount" property="sunCount" />
+		<result column="sclScore" property="sclScore" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+	<select id="selectTblSclRecordProbPage" resultType="Map">
+		SELECT
+			t.id,s.stuno,s.stuname,s.idno,s.phone,t.sunCount,t.sclScore,c.classname,s.class_id classid,t.studentId,t.createtime
+		FROM
+			tbl_scl_record t	
+			left join student s on t.studentId = s.id
+			left join tbl_class c on c.id = s.class_id
+		<where>
+			1=1 and (t.sclScore>160 or t.sunCount>43)
+			<if test="stuno != null">
+				and s.stuno like concat(concat('%',#{stuno}),'%')
+			</if>
+			<if test="stuname !=null">
+				and s.stuname like concat(concat('%',#{stuname}),'%')
+			</if>
+		</where>
+		order BY t.id
+	</select>
+	<select id="selectExportTblSclRecord" resultType="com.aaa.model.vo.TblSclRecordVo">
+		SELECT
+			t.id,s.stuno,s.stuname,s.idno,s.phone,t.sunCount,t.sclScore,c.classname,s.class_id classid,t.studentId,t.createtime
+		FROM
+			tbl_scl_record t	
+			left join student s on t.studentId = s.id
+			left join tbl_class c on c.id = s.class_id
+      		where (t.sclScore>160 or t.sunCount>43)
+	</select>
+</mapper>

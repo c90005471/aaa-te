@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TeacherPlanMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TeacherPlan">
+		<id column="id" property="id" />
+		<result column="teacherno" property="teacherno" />
+		<result column="begintime" property="begintime" />
+		<result column="stoptime" property="stoptime" />
+		<result column="makerid" property="makerid" />
+		<result column="maketime" property="maketime" />
+		<result column="classid" property="classid" />		
+		<result column="dostatus" property="dostatus" />
+		<result column="code" property="code" />
+	</resultMap>
+ <select id="selectPlanTeacherPage" resultType="Map">
+      
+        select sss.*,`user`.`name` teachername from 
+        (SELECT t.id,t.teacherno,t.begintime,t.stoptime,t.makerid,t.maketime,t.classid,t.`dostatus`,t.`code`,t.score,c.classname,u.`name`,r.`name` rolename,t.is_fen as isFen 
+        	FROM teacherplan t
+        	left join tbl_class c on t.classid=c.id
+        	left join `user` u  on t.makerid=u.id 
+        	left join organization o on c.orgid = o.id
+        	left join user_role ur on ur.user_id = t.teacherno
+			left join role r on r.id = ur.role_id
+        	WHERE c.graduate = 0
+        	<if test=" classid != null ">
+        		and t.classid = #{classid}  
+        	</if>
+        	<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(stoptime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+            <if test=" begintime != null ">
+                <![CDATA[ and t.begintime >= DATE_FORMAT(#{begintime},'%Y-%m-%d') ]]>
+            </if>
+            <if test=" stoptime != null ">
+                <![CDATA[ and t.stoptime <= DATE_FORMAT(#{stoptime},'%Y-%m-%d') ]]>
+            </if>
+            
+        	ORDER BY t.id ASC) sss ,`user` 
+         where sss.teacherno =`user`.id
+         <if test=" teachername != null ">
+                and `user`.`name` like concat(concat('%',#{teachername}),'%')
+         </if>
+        
+    </select>
+	<!-- 非分模块  教评结果 -->
+     <select id="selectTeaPlanTeacherPage" resultType="Map">
+      
+        select sss.*,`user`.`name` teachername from 
+        (SELECT t.id,t.teacherno,t.begintime,t.stoptime,t.makerid,t.maketime,t.classid,t.`dostatus`,t.`code`,t.score,c.classname,u.`name`,r.`name` rolename 
+        	FROM teacherplan t
+        	left join tbl_class c on t.classid=c.id
+        	left join `user` u  on t.makerid=u.id 
+        	left join organization o on c.orgid = o.id
+        	left join user_role ur on ur.user_id = t.teacherno
+			left join role r on r.id = ur.role_id
+        	WHERE c.graduate = 0 and t.is_fen is null
+        	<if test=" classid != null ">
+        		and t.classid = #{classid}  
+        	</if>
+        	<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(stoptime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+            <if test=" begintime != null ">
+                <![CDATA[ and t.begintime >= DATE_FORMAT(#{begintime},'%Y-%m-%d') ]]>
+            </if>
+            <if test=" stoptime != null ">
+                <![CDATA[ and t.stoptime <= DATE_FORMAT(#{stoptime},'%Y-%m-%d') ]]>
+            </if>
+            
+        	ORDER BY t.id ASC) sss ,`user` 
+         where sss.teacherno =`user`.id
+         <if test=" teachername != null ">
+                and `user`.`name` like concat(concat('%',#{teachername}),'%')
+         </if>
+        
+    </select>
+	<!-- 分模块  教评结果 -->
+    <select id="selectFenPlanTeacherPage" resultType="Map">
+      
+        select sss.*,`user`.`name` teachername from 
+        (SELECT t.id,t.teacherno,t.begintime,t.stoptime,t.makerid,t.maketime,t.classid,t.`dostatus`,t.`code`,t.score,c.classname,u.`name`,r.`name` rolename 
+        	FROM teacherplan t
+        	left join tbl_class c on t.classid=c.id
+        	left join `user` u  on t.makerid=u.id 
+        	left join organization o on c.orgid = o.id
+        	left join user_role ur on ur.user_id = t.teacherno
+			left join role r on r.id = ur.role_id
+        	WHERE c.graduate = 0 and t.is_fen=1
+        	<if test=" classid != null ">
+        		and t.classid = #{classid}  
+        	</if>
+        	<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(stoptime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+            <if test=" begintime != null ">
+                <![CDATA[ and t.begintime >= DATE_FORMAT(#{begintime},'%Y-%m-%d') ]]>
+            </if>
+            <if test=" stoptime != null ">
+                <![CDATA[ and t.stoptime <= DATE_FORMAT(#{stoptime},'%Y-%m-%d') ]]>
+            </if>
+            
+        	ORDER BY t.id ASC) sss ,`user` 
+         where sss.teacherno =`user`.id
+         <if test=" teachername != null ">
+                and `user`.`name` like concat(concat('%',#{teachername}),'%')
+         </if>
+        
+    </select>
+    <!-- 更新分模块 -->
+    <update id="updateTeacherPlan" parameterType="com.aaa.model.TeacherPlan">
+		update teacherplan set is_fen=#{isFen} where id=#{id}
+	</update>
+</mapper>

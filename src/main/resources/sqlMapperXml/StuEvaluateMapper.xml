@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.StuEvaluateMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.StuEvaluate">
+		<id column="id" property="id" />
+		<result column="stuid" property="stuid" />
+		<result column="topicid" property="topicid" />
+		<result column="score" property="score" />
+		<result column="planid" property="planid" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+  <select id="selectByplanidAndclassid" parameterType="map" resultType="map">
+  	select sss.*,course.course_name from (select s.stuno,s.stuname,se.topicid,se.score from student s 
+LEFT JOIN (select * from stu_evaluate sse where sse.planid=#{planid}) se on s.id=se.stuid   
+where s.class_id=#{classid}) sss left JOIN course on  sss.topicid=course.id;
+  
+  </select>
+  <select id="selectAvgscoreByplanid" parameterType="map" resultType="map">
+select sss.*,c.course_name from (select avg(s.score) as avgscore, topicid from stu_evaluate s where  s.planid=#{planid} group by s.topicid) sss ,course c where sss.topicid=c.id;
+  </select>
+  <!-- 获取班级所有学生个数 -->
+  <select id="getDetailByRade" resultType="map" parameterType="java.lang.Long">
+		 SELECT tbl_class.classname AS classname, COUNT(student.stuno) as sum   FROM student LEFT JOIN tbl_class on student.class_id=tbl_class.id WHERE student.class_id=(SELECT stu_plan.classId FROM stu_plan WHERE stu_plan.id=#{id}) GROUP BY student.class_id
+	</select>
+	  <!-- 获取班级所有评价过的学生个数 -->
+	<select id="getDetailByCount" resultType="java.lang.Float" parameterType="java.lang.Long">
+		 SELECT COUNT(DISTINCT stuid) as number FROM stu_evaluate WHERE planid=#{planid} GROUP BY stu_evaluate.planid
+	</select>
+</mapper>

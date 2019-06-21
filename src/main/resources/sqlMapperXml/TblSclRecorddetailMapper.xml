@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclRecorddetailMapper">
+
+	<!--slc-90测试总体结果 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblSclRecorddetail">
+		<id column="id" property="id" />
+		<result column="studentid" property="studentid" />
+		<result column="sclid" property="sclid" />
+		<result column="scoreDetail" property="scoreDetail" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+	<!-- 查询该学生的测试详情 -->
+	<select id="selectTblSclRecordDetailPage" resultType="Map">
+		SELECT
+			td.id,s.stuno,s.stuname,t.item,td.scoreDetail,td.createtime
+		FROM
+			tbl_scl_recorddetail td
+			left join tbl_scl t on td.sclid=t.id
+			left join student s on s.id=td.studentid
+		<where>
+			1=1
+			<if test="studentid != null">
+				and td.studentid=#{studentid}
+			</if>
+			<if test="createtime != null">
+				<![CDATA[ and td.createtime like '%${createtime}%'  ]]>
+			</if>
+		</where>
+		<!-- order BY td.id -->
+	</select>
+	<!-- 通过学生id查询他的十项指标平均分 -->
+	<select id="selectAvgscoreBystudentid" parameterType="Map" resultType="Map">
+		SELECT t.typename typename,AVG(d.scoreDetail) avgscore
+		 FROM tbl_scl_recorddetail d
+		  LEFT JOIN tbl_scl s ON d.sclid = s.id
+		   LEFT JOIN tbl_scl_type t ON t.id = s.typeid
+		   <where>
+			1=1
+			<if test="studentid != null">
+				and d.studentid=#{studentid}
+			</if>
+			<if test="createtime != null">
+				<![CDATA[ and d.createtime like '%${createtime}%'  ]]>
+			</if>
+		</where>
+		GROUP BY t.id
+		    <!-- WHERE d.studentid=#{studentid} and d.createtime like '%#{createtime}%' GROUP BY t.id -->
+	</select>
+</mapper>

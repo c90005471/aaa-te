@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.CourseMapper">
+
+    <!-- 注意表明默认是实体类名 -->
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+         id , course_code as courseCode, course_name as courseName , icon,pid, seq,status, course_type as  courseType ,create_time AS createTime,orgid
+    </sql>
+    <select id="selectChildById" parameterType="Long" resultType="Long">
+    	select b.id from course a ,course b where a.id=b.pid and a.id=#{id} UNION 
+        select id from course where pid in (select b.id from course a ,course b where a.id=b.pid and a.id=#{id})
+    </select>
+	<delete id="deleteCourseById" parameterType="map">
+		delete from course where id 
+		in
+		    <foreach collection="selectChildByIdList" item="it" index="index" open="("  close=")" separator=",">
+		    	#{it}
+		    </foreach>
+	</delete>
+		<insert id="insertCourse"  useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.Course">
+	  		insert into course (course_code,course_name,pid,seq,status,icon,course_type,orgId,course_version,create_time) values (#{courseCode},#{courseName},#{pid},#{seq},#{status},#{icon},#{courseType},#{orgid},#{courseVersion},#{createTime})
+	   </insert>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.ExamRecordMapper">
+	
+	<insert id="insertExamRecord"  useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.ExamRecord">
+	  	insert into exam_record (stuid,paperid,score,state,createtime) values (#{stuid},#{paperid},#{score},#{state},#{createtime})
+	 </insert>
+	 
+    <select id="selectExamRecordPage" resultType="Map">
+        select  t.id,s.stuno,s.stuname,t.score,t.state, t.paperid from exam_record t
+        left join student s on s.id=t.stuid
+        <!--left join exam_paper e on e.id = t.paperid-->
+         left join tbl_class c on c.id = s.class_id 
+        <where> c.graduate = 0
+        	<if test=" paperId != null ">
+        		and t.paperid = #{paperId}  
+        	</if>
+        	<!--<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" title != null and title!=''">
+                and e.title like concat(concat('%',#{title}),'%')
+            </if>
+            <if test=" stuname != null and stuname!=''">
+                and s.stuname like concat(concat('%',#{stuname}),'%')
+            </if>-->
+        </where>
+        order BY t.id desc
+    </select>
+     <select id="selectExamRecordVoList" parameterType="map" resultType="com.aaa.model.vo.ExamRecordVo">
+     		select  t.id,s.stuno,s.stuname,t.score,t.state, t.paperid from exam_record t
+        	left join student s on s.id=t.stuid
+         	left join tbl_class c on c.id = s.class_id 
+         	where c.graduate = 0 and  t.paperid = #{paperId}  
+     </select>
+</mapper>

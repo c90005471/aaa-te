@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.StudentRecordMapper">
+
+	 <select id="selectStudentRecordPage" resultType="Map">
+		SELECT
+			t.id,s.stuno,s.stuname studentname,c.classname oldclassname,m.classname newclassname,t.operrecord,u.name creatname,t.createtime
+		FROM
+			student_record t	
+			left join tbl_class c on t.oldclass_id = c.id
+			left join tbl_class m on t.newclass_id = m.id
+			left join organization o on c.orgid = o.id
+			left join user u on u.id = t.creator
+			left join student s on s.id = t.studentid
+        <where>
+        	1=1 
+            <if test=" id != null ">
+                 and ((t.oldclass_id= #{id} and t.operrecord ='0') or (t.newclass_id= #{id} and t.operrecord ='1') )
+            </if>
+            <if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(t.createtime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+            <if test=" stoptime != null ">
+                and DATE_FORMAT(t.createtime,'%Y-%m-%d')  between DATE_FORMAT(#{begintime},'%Y-%m-%d') and DATE_FORMAT(#{stoptime},'%Y-%m-%d')
+            </if>
+            <if test=" studentname != null ">
+                 and s.stuname  like concat(concat('%',#{studentname}),'%')
+            </if> 
+        </where>
+        order BY t.id
+    </select>
+    <insert id="insertStudentRecord" useGeneratedKeys="true" keyProperty="id"  parameterType="com.aaa.model.StudentRecord">
+	  	insert into student_record (studentid,oldclass_id,newclass_id,operrecord,creator,createtime) values (#{studentid},#{oldclass_id},#{newclass_id},#{operrecord},#{creator},#{createtime})
+	 </insert>
+</mapper>

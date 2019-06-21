@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblProjectMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblProject">
+		<id column="id" property="id" />
+		<result column="projectname" property="projectname" />
+		<result column="createtime" property="createtime" />
+		<result column="projectstatusid" property="projectstatusid" />
+		<result column="projectpath" property="projectpath" />
+	</resultMap>
+	<!-- 查询项目的分页信息 -->
+	<select id="selectTblProjectPage" resultType="Map">
+		SELECT
+		 tp.id,tp.projectname,GROUP_CONCAT(DISTINCT uu.`name` SEPARATOR ',') teacher,GROUP_CONCAT(DISTINCT s.stuname SEPARATOR ',') students,GROUP_CONCAT(DISTINCT tc.classname SEPARATOR ',') classname,tp.createtime,tp.starttime,tp.endtime,tpt.statusname
+		FROM
+			tbl_project tp,tbl_project_status tpt,tbl_project_student tps,student s,tbl_class tc,tbl_project_user tpu, `user` uu
+		WHERE
+			tpt.id=tp.projectstatusid AND tpu.projectid=tp.id AND tpu.userid=uu.id AND tps.studentid=s.id AND tps.projectid=tp.id AND s.class_id=tc.id
+		 	<if test="stuname != null and stuname !=''">
+		 		and s.stuname like concat(concat('%',#{stuname}),'%')
+		 	</if>
+		 	 <if test="classid != null and classid !=''">
+		 		and s.class_id=#{classid}
+		 	</if>
+		 	<if test="projectname != null and projectname != ''">
+		 		and tp.projectname like concat(concat('%',#{projectname}),'%')
+		 	</if>
+		 	<if test="projectstage != null and projectstage != ''">
+		 		and tp.projectstage=#{projectstage}
+		 	</if>
+		 GROUP BY tp.id
+		 
+		 ORDER BY tp.id
+	</select>
+	<select id="">
+		select
+		 tp.id id,tp.projectname name,tp.createtime createtime,tpt.statusname statusname,group_concat(distinct s.stuname  separator ',') as stuname,GROUP_CONCAT(DISTINCT uu.`name` SEPARATOR ',') teacher,tc.classname classname,tpt.statusname statusname
+		from tbl_project tp ,tbl_project_student tps,tbl_project_status tpt,`user` uu ,student s,tbl_project_user tpu,tbl_class tc 
+		<where>
+			tp.projectstatusid=tpt.id AND tpu.id=uu.id AND tps.studentid=s.id AND tp.id=tp.id=tps.projectid AND tp.id=tpu.projectid and tc.id=s.classid and 1=1
+			<if test="classid != null">
+				and s.class_id=#{classid}
+			</if>
+		</where>
+	</select>
+</mapper>

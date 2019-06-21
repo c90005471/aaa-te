@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TeaQuestionMapper">
+	<resultMap id="QuestionResultMap" type="com.aaa.model.TeaQuestion">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="questionname" property="questionname" jdbcType="VARCHAR"/>
+	</resultMap>
+	<resultMap id="QuestionVoResultMap" type="com.aaa.model.vo.TeaQuestionVo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="questionname" property="questionname" jdbcType="VARCHAR"/>
+        
+        <collection property="rolesList" ofType="Role">
+            <id column="roleId" property="id"/>
+            <result column="roleName" property="name"/>
+        </collection>
+    </resultMap>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, questionname
+    </sql>
+	<select id="selectQuestionVoById" resultMap="QuestionVoResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id, t.questionname,r.id roleId,r.name roleName
+        FROM
+        teacherquestion t
+        left join teaquestion_role e on t.id = e.question_id
+        left join role r on  r.id = e.role_id
+        <where>
+            t.id = #{id}
+        </where>
+    </select>
+    <select id="selectQuestionPage" resultType="Map">
+        SELECT
+        t.id, t.questionname,group_concat(r.`name`) AS rolesList
+        FROM
+        teacherquestion t
+        left join teaquestion_role e on t.id = e.question_id
+        left join role r on  r.id = e.role_id
+        GROUP BY t.id
+    </select>
+    <select id="selectListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id, t.questionname
+        FROM
+        teacherquestion t
+        left join teaquestion_role e on t.id = e.question_id
+        left join role r on  r.id = e.role_id
+        <where>
+            r.id = #{roleId}
+        </where>
+    </select>
+	<!-- 查询分模块教师查询 -->
+    <select id="selecFentListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id, t.questionname
+        FROM
+        teacherquestion t
+        left join teaquestion_role e on t.id = e.question_id
+        left join role r on  r.id = e.role_id
+        <where>
+            r.id = #{roleId} and t.id>24
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.WordofmouthMapper">
+
+
+
+    <select id="selectWordofmouthPage" resultType="Map">
+        SELECT 
+        t.id, t.stuname, t.stuphone, t.teaname,t.teaphone, t.remark,t.status,
+        t.createtime
+        FROM wordofmouth t
+        <where>
+            <if test=" stuname != null and stuname != '' ">
+                 t.stuname like concat(concat('%',#{stuname}),'%')
+            </if>
+            <if test=" teaname != null and teaname != '' ">
+                and t.teaname like concat(concat('%',#{stuname}),'%')
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(createtime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+            <if test=" stoptime != null ">
+                and DATE_FORMAT(t.createtime,'%Y-%m-%d')  between DATE_FORMAT(#{begintime},'%Y-%m-%d') and DATE_FORMAT(#{stoptime},'%Y-%m-%d')
+            </if>
+        </where>
+        GROUP BY t.id
+    </select>
+	<!-- 查询每个口碑状态的数量 -->
+   <select id="selectWordStatusByHashMap" parameterType="map" resultType="map">
+		select count(s.id) as stunamecount, s.status from wordofmouth s  
+		<where>
+        	1=1 
+            <if test=" teaname != null ">
+                 and s.teaname = #{teaname}
+            </if>
+            <if test=" endtime != null ">
+                and DATE_FORMAT(s.createtime,'%Y-%m-%d')  between DATE_FORMAT(#{begintime},'%Y-%m-%d') and DATE_FORMAT(#{endtime},'%Y-%m-%d')
+            </if>
+            <if test=" flag != null ">
+                 and DATE_FORMAT(s.createtime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+            </if>
+        </where>
+		 group by s.status
+  </select> 
+  <!-- 查询每个口碑状态的数量 -->
+   <select id="selectWordStatusByMonHashMap" parameterType="map" resultType="map">
+		SELECT B.MON,sum(B.stunamecount) stunamecount
+			FROM 
+			(
+			SELECT SUBSTRING(s.createtime, 6, 2) AS mon,count(s.id) AS stunamecount
+			FROM wordofmouth s
+			<where>
+	        	1=1 
+	            <if test=" teaname != null ">
+	                 and s.teaname = #{teaname}
+	            </if>
+	            <if test=" endtime != null ">
+	                and DATE_FORMAT(s.createtime,'%Y-%m-%d')  between DATE_FORMAT(#{begintime},'%Y-%m-%d') and DATE_FORMAT(#{endtime},'%Y-%m-%d')
+	            </if>
+	            <if test=" flag != null ">
+	                 and DATE_FORMAT(s.createtime,'%Y-%m') = DATE_FORMAT(NOW(),'%Y-%m')
+	            </if>
+	        </where>
+			GROUP BY SUBSTRING(s.createtime, 6, 2)
+			<foreach collection="monList" item="mon">
+				UNION
+				SELECT #{mon} as mon,0 as stunamecount
+			</foreach>
+			) B 
+		 GROUP BY B.MON
+		 ORDER BY B.MON 
+  </select> 
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.ExamquestionMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.Examquestion">
+		<id column="questionid" property="questionid" />
+		<result column="courseid" property="courseid" />
+		<result column="optiona" property="optiona" />
+		<result column="optionb" property="optionb" />
+		<result column="optionc" property="optionc" />
+		<result column="optiond" property="optiond" />
+		<result column="answer" property="answer" />
+		<result column="questionname" property="questionname" />
+		<result column="mark" property="mark" />
+		<result column="createtime" property="createtime" />
+	</resultMap>
+	
+	<select id="selectExamquestionPage" resultType="map">
+		select e.*,c.course_name as coursename from examquestion e left join course c on e.courseid = c.id 
+	</select>
+</mapper>

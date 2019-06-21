@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblClassRecordMapper">
+
+	<select id="selectAllTblClassRecord" resultType="com.aaa.model.TblClassRecord">
+		select min(t.id) id,t.class_id,group_concat(distinct u.name  separator ',') as username,u1.name creatname,t.createtime,b.classname,b.orgid 
+		from tbl_class_record t
+			 left join  tbl_class_record m on t.class_id = m.class_id
+			 left join  tbl_class_record n on n.createtime = t.createtime
+			 left join  tbl_class_record p on p.creator = t.creator
+			 left join user u on u.id = t.userid
+			 left join user u1 on t.creator = u1.id
+			 left join tbl_class b on b.id = t.class_id
+		group by t.class_id,t.createtime,u1.name
+	</select>
+	
+  <insert id="insertTblClassRecord" useGeneratedKeys="true" keyProperty="id"  parameterType="com.aaa.model.TblClass">
+  	insert into tbl_class_record (userid,creator,createtime,class_id) values (#{userid},#{creator},#{createtime},#{class_id})
+  </insert>
+  
+</mapper>

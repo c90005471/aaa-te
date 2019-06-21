@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblClassMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblClass">
+		<id column="id" property="id" />
+		<result column="classname" property="classname" />
+		<result column="createtime" property="createtime" />
+		<result column="graduate" property="graduate" />
+		
+		<result column="begin" property="begin" />
+		<result column="over" property="over" />
+		<result column="firstbegin" property="firstbegin" />
+		<result column="firstover" property="firstover" />
+		<result column="secondbegin" property="secondbegin" />
+		<result column="secondover" property="secondover" />
+		
+	</resultMap>
+	<select id="selectAllClass" resultMap="BaseResultMap">
+		select * from tbl_class
+	</select>
+	<!-- 设置图标，设置默认 -->
+	<select id="selectAllClassMap" resultType="Map">
+		select tc.*,group_concat(distinct uu.`name`  separator ',') as teacher, 'fi-torsos icon-red' as iconCls 
+		from tbl_class tc ,tbl_user_class tuc ,`user` uu 
+		where tc.id=tuc.class_id and tuc.user_id=uu.id 
+		<if test=" flag != null ">
+			and tc.graduate = #{flag}
+		</if>
+		GROUP BY tc.id
+	</select>
+	<select id="selectClassById" parameterType="Long" resultMap="BaseResultMap">
+		select * from tbl_class where id=#{id}
+	</select>
+  <select id="selectTeacherByClassId" parameterType="Long" resultType="String">
+  	select u.`name` from tbl_class tc ,tbl_user_class  tuc , user u  where  tc.id=tuc.class_id and tuc.user_id=u.id and tc.id=#{id}
+  
+  </select>
+  <insert id="insertClass" useGeneratedKeys="true" keyProperty="id"  parameterType="com.aaa.model.TblClass">
+  	insert into tbl_class (classname,createtime,graduate,orgid,begin,over,firstbegin,firstover,secondbegin,secondover) values (#{classname},#{createtime},#{graduate},#{orgid},#{begin},#{over},#{firstbegin},#{firstover},#{secondbegin},#{secondover})
+  </insert>
+  <insert id="insertClassTeacher" parameterType="Map">
+  	insert into tbl_user_class (user_id,class_id) values (#{teacherId},#{classId})
+  </insert>
+  <update id="updateClass" parameterType="com.aaa.model.TblClass">
+  	update  tbl_class set classname=#{classname},createtime=#{createtime},begin=#{begin},over=#{over},firstbegin=#{firstbegin},firstover=#{firstover},secondbegin=#{secondbegin},secondover=#{secondover},graduate=#{graduate},orgid=#{orgid} where id=#{id}
+  </update>
+  <delete id="deleteClassTeacherByClassId" parameterType="Long">
+  	delete from tbl_user_class where class_id=#{id}
+  </delete>
+  
+  <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+        id, class_id,user_id
+    </sql>
+  <select id="selectByClassid" resultType="Map" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from tbl_user_class
+        where class_id = #{class_id}
+    </select>
+</mapper>

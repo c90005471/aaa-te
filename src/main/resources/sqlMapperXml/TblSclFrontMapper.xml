@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.TblSclFrontMapper">
+
+	<!-- 注意表明默认是实体类名 -->
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+         id , item, typeId
+    </sql>
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.aaa.model.TblScl">
+		<id column="id" property="id" />
+		<result column="item" property="item" />
+		<result column="typeId" property="typeId" />
+	</resultMap>
+	<!-- <select id="selectTblSclPage" resultType="list">
+		select ts.*,tt.typeName from tbl_scl ts,tbl_scl_type tt where ts.typeId=tt.id 
+		
+			<if test="name != null and name!= '' ">
+			    and	tt.typeName=#{name}
+			</if>
+		
+		order by ts.id
+	</select> -->
+	<select id="selecAllTblScls" resultMap="BaseResultMap">
+		select id,item,typeId from tbl_scl
+	</select>
+</mapper>

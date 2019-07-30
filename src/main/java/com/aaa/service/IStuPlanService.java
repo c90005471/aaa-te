@@ -20,4 +20,7 @@ public interface IStuPlanService extends IService<StuPlan> {
 
 	List<Map> selectPlanStuList(Map<String, Object> condition);
 	
+	//根据班级id和教师no去查stu_plan
+	StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId,Long teacherno);
+	
 }

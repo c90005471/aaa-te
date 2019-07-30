@@ -35,7 +35,10 @@ var questions="";
 		questions=data;//后台传过来的数据，赋值给全局变量questions
 		}
 	    });
-var itemList=["5","4","3","2","1"];
+/* 现在有两个分数 每套总分为100分去计算(暂定)   */
+var itemList=["10","8","6","4","2"];
+var itemList2 = ["25","20","15","10","5"];
+var itemList3 = ["5","4","3","2","1"];
 var activeQuestion=1; //当前操作的考题编号
 var questioned = 0; //
 var checkQues = []; //已做答的题的集合
@@ -70,10 +73,17 @@ function showQuestion(id){
     var question = questions[id];
     $(".question_title").html("<strong>第 "+(id+1)+" 题    </strong>"+question.questionTitle);
     var items = question.questionItems.split(";");
+    var questionType = question.questionType;
     var item="";
     for(var i=0;i<items.length;i++){
-        item ="<li class='question_info' onclick='clickTrim(this)' id='item"
-                +i+"'><input type='radio' name='item' value='"+itemList[i]+"'>&nbsp;"+itemList[i]+"."+items[i]+"</li>";
+    	/* 对问题类型进行判断如果为1 则适用于第一个分数数组 如果为2 则适用于第二个分数数组  */
+    	if(questionType == 1){
+        	item ="<li class='question_info' onclick='clickTrim(this)' id='item"
+                +i+"'>"+itemList3[i]+"&nbsp;<input type='radio' name='item' value='"+itemList[i]+"'>&nbsp;"+items[i]+"</li>";
+    	}else{
+            item ="<li class='question_info' onclick='clickTrim(this)' id='item"
+                +i+"'>"+itemList3[i]+"&nbsp;<input type='radio' name='item' value='"+itemList2[i]+"'>&nbsp;"+items[i]+"</li>";
+    	}
         $(".question").append(item);
     }
     $(".question").attr("id","question"+id);

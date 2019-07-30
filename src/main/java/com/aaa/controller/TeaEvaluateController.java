@@ -156,7 +156,8 @@ public class TeaEvaluateController extends BaseController {
 		return "admin/teaEvaluate/showRate";
     }
     //填充前台的仪表盘的数据
-    @ResponseBody
+    @SuppressWarnings("rawtypes")
+	@ResponseBody
 	@RequestMapping(value="/countRade",method=RequestMethod.POST)
 	public Object countRade(Long planid){
     	Map count=teacherDetailService.selectByTeacher(planid);

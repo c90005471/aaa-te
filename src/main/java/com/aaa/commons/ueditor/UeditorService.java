@@ -10,7 +10,7 @@ import com.aaa.commons.ueditor.define.BaseState;
 import com.aaa.commons.ueditor.define.State;
 import com.aaa.commons.ueditor.hunter.ImageHunter;
 import com.aaa.commons.ueditor.manager.IUeditorFileManager;
-import com.aaa.commons.ueditor.upload.Uploader;
+//import com.aaa.commons.ueditor.Uploader;
 import com.aaa.commons.utils.JsonUtils;
 import com.aaa.commons.utils.StringUtils;
 
@@ -92,7 +92,7 @@ public class UeditorService {
 		case ActionMap.UPLOAD_VIDEO:
 		case ActionMap.UPLOAD_FILE:
 			conf = ueditorManager.getConfig(actionCode, rootPath);
-			state = new Uploader(request, conf).doExec(fileManager);
+//			state = new Uploader(request, conf).doExec(fileManager);
 			break;
 
 		case ActionMap.CATCH_IMAGE:

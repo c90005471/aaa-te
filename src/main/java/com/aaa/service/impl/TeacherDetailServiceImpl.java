@@ -28,9 +28,11 @@ public class TeacherDetailServiceImpl extends ServiceImpl<TeacherDetailMapper, T
 	@Autowired
 	private TeacherDetailMapper teacherDetailMapper;
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Map> selectAvgscoreByplanid(Map map) {
-		return teacherDetailMapper.selectAvgscoreByplanid(map);
+		List<Map> resMap = teacherDetailMapper.selectAvgscoreByplanid(map);
+		return resMap;
 	}
 	@Override
 	public Map selectByplanidAndclassid(Long id) {

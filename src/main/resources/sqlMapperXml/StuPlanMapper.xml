@@ -73,4 +73,9 @@
                 and t.id = #{id}
             </if>
     </select>
+    
+    <!-- 根据id和no查询学生自评计划 -->
+    <select id = "selectPlanInfoByClassIdAndTeaNo" parameterType="Map" resultMap="BaseResultMap">
+    	select * from stu_plan where classId =#{classId} and teacherno = #{teacherno} and dostatus = 1 ORDER BY begintime desc limit 1
+    </select>
 </mapper>

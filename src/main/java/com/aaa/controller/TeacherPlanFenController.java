@@ -66,7 +66,7 @@ public class TeacherPlanFenController extends BaseController {
     private IOrganizationService organizationService;
     @GetMapping("/manager")
     public String manager() {
-        return "admin/teacherPlan/teacherPlanList";
+        return "admin/teaEvaluate/teaEvaluateList";
     }
     
     /*根据班级id查询所有该班级的老师*/
@@ -138,7 +138,7 @@ public class TeacherPlanFenController extends BaseController {
      */
     @GetMapping("/addPage")
     public String addPage() {
-        return "admin/teacherPlan/teacherPlanAdd";
+        return "admin/teaEvaluate/teacherFenPlanAdd";
     }
     
     /**
@@ -159,6 +159,8 @@ public class TeacherPlanFenController extends BaseController {
 		teacherPlan.setStoptime(getEndTime(teacherPlanVo.getBegintime(), teacherPlanVo.getHournum()));
 		teacherPlan.setDostatus(0);
 		teacherPlan.setTeacherno(teacherPlanVo.getTeacherno());
+		//新增设置为分模块(null  不是       1  是)
+		teacherPlan.setIsFen(1);
     	boolean b = teacherPlanService.insert(teacherPlan);
         if (b) {
         	User teacher = userService.selectById(teacherPlan.getTeacherno());

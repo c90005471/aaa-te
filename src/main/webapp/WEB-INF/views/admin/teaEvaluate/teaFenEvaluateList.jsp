@@ -6,6 +6,7 @@
     var orgid;
     var classid;
     var selectRowStr;
+    var classname;
     $(function() {
      teaEvaluateFenClassTree = $('#teaEvaluateFenClassTree').tree({
             url : '${path }/tblClass/tree?Math.random()',
@@ -35,17 +36,16 @@
         		    //将classid传入到后台
         		    classid=node.id;
         		    orgid = null;
+                	classname=node.text;
         		    var treeParent = $(this).tree('getParent', node.target); 
         		    //orgid=treeParent.id;//获取orgid   经查无用
         		    $("#orgid").val("");
                 	$("#classid").val(classid);
         			teaEvaluateFenDataGrid.datagrid('load',$.serializeObject($('#teaEvaluateSearchForm')));
                 	//将添加按钮显示
-        			/* teaEvaluateFenDataGrid.datagrid( {
-                    	toolbar : '#stuEvaluateToolbar'
-                	}
-                	
-                	); */
+        			 teaEvaluateFenDataGrid.datagrid( {
+                    	toolbar : '#teacherFenPlanToolbar'
+                	}); 
         		}
             }
         });
@@ -163,6 +163,27 @@
     });
         
 });
+/**
+ * 添加框
+ * @param url
+ */
+function teacherFenPlanAddFun() {
+    parent.$.modalDialog({
+        title : '添加',
+        width : 550,
+        height : 190,
+        href : '${path}/teacherPlanFen/addPage',
+        buttons : [ {
+            text : '确定',
+            width:50,
+            handler : function() {
+                parent.$.modalDialog.openner_dataGrid = teaEvaluateFenDataGrid;//因为添加成功之后，需要刷新这个treeGrid，所以先预定义好
+                var f = parent.$.modalDialog.handler.find('#teacherFenPlanAddForm');
+                f.submit();
+            }
+        } ]
+    });
+}
 
 
 
@@ -286,6 +307,7 @@ function time(number){
 
 
 
+
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -324,6 +346,14 @@ function time(number){
         <ul id="teaEvaluateFenClassTree" style="width:160px;margin: 10px 10px 10px 10px"></ul>
     </div>
 </div>
-<div id="teaEvaluateToolbar" style="display: none;">
-      <a onclick="exportTeaEvaluateExcel();" id="teaExport" href="javascript:void(0);"   class="easyui-linkbutton" data-options="plain:true,iconCls:'fi-download icon-green'">导出excel</a>
+<div>
+	<div id="teaEvaluateToolbar" style="display: none; float:left;">
+      <a onclick="exportTeaEvaluateExcel();" id="teaExport" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'fi-download icon-green'">导出excel</a>
+	</div>
+	<div id="teacherFenPlanToolbar" style="display: none;float:left;">
+	    <shiro:hasPermission name="/teacherPlan/add">
+        	<a onclick="teacherFenPlanAddFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'fi-plus icon-green'">添加计划</a>
+    	</shiro:hasPermission>
+	</div>
 </div>
+

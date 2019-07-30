@@ -4,10 +4,12 @@
 	<resultMap id="QuestionResultMap" type="com.aaa.model.TeaQuestion">
 		<id column="id" property="id" jdbcType="BIGINT"/>
         <result column="questionname" property="questionname" jdbcType="VARCHAR"/>
+        <result column="type" property="questiontype" jdbcType="INTEGER"/>
 	</resultMap>
 	<resultMap id="QuestionVoResultMap" type="com.aaa.model.vo.TeaQuestionVo">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="questionname" property="questionname" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
         
         <collection property="rolesList" ofType="Role">
             <id column="roleId" property="id"/>
@@ -20,12 +22,13 @@
     </sql>
 	<select id="selectQuestionVoById" resultMap="QuestionVoResultMap" parameterType="java.lang.Long">
         SELECT
-        t.id, t.questionname,r.id roleId,r.name roleName
+        t.id, t.questionname,r.id roleId,r.name roleName, t.type type
         FROM
         teacherquestion t
         left join teaquestion_role e on t.id = e.question_id
         left join role r on  r.id = e.role_id
         <where>
+        	t.status = 1 and 
             t.id = #{id}
         </where>
     </select>
@@ -36,28 +39,31 @@
         teacherquestion t
         left join teaquestion_role e on t.id = e.question_id
         left join role r on  r.id = e.role_id
+        where t.status = 1 
         GROUP BY t.id
     </select>
     <select id="selectListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
         SELECT
-        t.id, t.questionname
+        t.id, t.questionname,t.type
         FROM
         teacherquestion t
         left join teaquestion_role e on t.id = e.question_id
         left join role r on  r.id = e.role_id
         <where>
+        	t.status = 1 and 
             r.id = #{roleId}
         </where>
     </select>
 	<!-- 查询分模块教师查询 -->
     <select id="selecFentListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
         SELECT
-        t.id, t.questionname
+        t.id, t.questionname,t.type
         FROM
         teacherquestion t
         left join teaquestion_role e on t.id = e.question_id
         left join role r on  r.id = e.role_id
         <where>
+        	t.status = 1 and 
             r.id = #{roleId} and t.id>24
         </where>
     </select>

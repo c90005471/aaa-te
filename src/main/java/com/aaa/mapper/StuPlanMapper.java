@@ -19,4 +19,7 @@ public interface StuPlanMapper extends BaseMapper<StuPlan> {
 	List<Map<String, Object>> selectPlanStuPage(Pagination page, Map<String, Object> params);
 
 	List<Map> selectPlanStuList(Map<String, Object> condition);
+	
+	//根据班级id和教师no去查stu_plan
+	StuPlan selectPlanInfoByClassIdAndTeaNo(Map map);
 }

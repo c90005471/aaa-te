@@ -324,6 +324,8 @@ public class FrontController extends BaseController{
 			questionIdMap.put(i, selectList.get(i).getId());
 			q.setQuestionTitle(selectList.get(i).getQuestionname());
 			q.setQuestionItems(ConstantUtils.Question_Items);
+			//将问题分成了两个部分	1:授课教评，2:班级学习
+			q.setQuestionType(Integer.parseInt(selectList.get(i).getQuestiontype()));
 			questionList.add(q);
 		}
 		session.setAttribute("questionIdMap", questionIdMap);

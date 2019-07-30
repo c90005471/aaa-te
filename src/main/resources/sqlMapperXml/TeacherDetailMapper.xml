@@ -18,11 +18,14 @@
 	select sss.*,c.course_name from (select avg(s.score) as avgscore, topicid from stu_evaluate s where  s.planid=#{planid} group by s.topicid) sss ,course c where sss.topicid=c.id;
   </select> -->
   <select id="selectByplanid" parameterType="map" resultType="map">
-  	select td.*,tq.questionname from teacherdetail td ,teacherquestion tq where  td.questionid=tq.id and td.teatestid=#{planid}
+  	select td.*,tq.questionname from teacherdetail td ,teacherquestion tq where  td.questionid=tq.id and td.teatestid=#{planid} and tq.status = 1
   </select>
   <!-- 查询每个考核点的平均分 -->
    <select id="selectAvgscoreByplanid" parameterType="map" resultType="map">
-	select sss.*,q.questionname from (select avg(s.score) as avgscore, questionid from teacherdetail s where  s.teatestid=#{planid} group by s.questionid) sss ,teacherquestion q where sss.questionid=q.id
+	select sss.*,q.questionname,q.type from (
+	select avg(s.score) as avgscore, questionid from teacherdetail s 
+	where  s.teatestid=#{planid} group by s.questionid) sss ,teacherquestion q 
+	where sss.questionid=q.id and q.status = 1
   </select> 
    <!-- 获取所有的学生数量 -->
    <select id="selectByteacherSum" parameterType="java.lang.Long" resultType="map">

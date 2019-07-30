@@ -28,6 +28,9 @@ public class TeaQuestionVo implements Serializable{
 	/** 教师角色*/
 	private String roleIds;
 	
+	/** 类型 */ 
+	private int type;
+	
 	
 	private List<Role> rolesList;
 	
@@ -67,6 +70,14 @@ public class TeaQuestionVo implements Serializable{
 
 	public void setRolesList(List<Role> rolesList) {
 		this.rolesList = rolesList;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 }

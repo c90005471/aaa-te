@@ -1,5 +1,6 @@
 package com.aaa.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,14 @@ public class StuPlanServiceImpl extends ServiceImpl<StuPlanMapper, StuPlan> impl
 	public List<Map> selectPlanStuList(Map<String, Object> condition) {
 		return stuPlanMapper.selectPlanStuList(condition);
 		
+	}
+	
+	@Override
+	public StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId, Long teacherno) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("classId", classId);
+		map.put("teacherno", teacherno);
+		return stuPlanMapper.selectPlanInfoByClassIdAndTeaNo(map);
 	}
 	
 }

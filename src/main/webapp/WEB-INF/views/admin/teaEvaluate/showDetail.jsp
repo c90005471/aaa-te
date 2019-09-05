@@ -43,18 +43,36 @@ var teaPlanDetailDataGrid;
              width:20,
             field : 'floor',
            formatter : function(value, row, index) {
-                switch (row.score) {
-                case 1:
-                    return '差';
-                case 2:
-                    return '较差';
-                case 3:
-                    return '一般';
-                case 4:
-                    return '好';
-                case 5:
-                    return '很好';
-                }
+        	   /* 
+        	   	根据类型判断等级(有两个类型因为成绩计算方式不一致)
+        	   */
+        	   if(row.type == 1){
+        		   switch (row.score) {
+	                   case 2:
+	                       return '差';
+	                   case 4:
+	                       return '较差';
+	                   case 6:
+	                       return '一般';
+	                   case 8:
+	                       return '好';
+	                   case 10:
+	                       return '很好';
+	               	}
+        	   	}else if(row.type == 2){
+        	   		switch (row.score) {
+	                   case 5:
+	                       return '差';
+	                   case 10:
+	                       return '较差';
+	                   case 15:
+	                       return '一般';
+	                   case 20:
+	                       return '好';
+	                   case 25:
+	                       return '很好';
+	               	}
+        	   	}
             }
         },{
             title : '意见',

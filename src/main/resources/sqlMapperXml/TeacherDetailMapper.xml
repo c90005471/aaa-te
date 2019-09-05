@@ -18,7 +18,7 @@
 	select sss.*,c.course_name from (select avg(s.score) as avgscore, topicid from stu_evaluate s where  s.planid=#{planid} group by s.topicid) sss ,course c where sss.topicid=c.id;
   </select> -->
   <select id="selectByplanid" parameterType="map" resultType="map">
-  	select td.*,tq.questionname from teacherdetail td ,teacherquestion tq where  td.questionid=tq.id and td.teatestid=#{planid} and tq.status = 1
+  	select td.*,tq.questionname,tq.type from teacherdetail td ,teacherquestion tq where td.questionid=tq.id and td.teatestid=#{planid} and tq.status = 1
   </select>
   <!-- 查询每个考核点的平均分 -->
    <select id="selectAvgscoreByplanid" parameterType="map" resultType="map">

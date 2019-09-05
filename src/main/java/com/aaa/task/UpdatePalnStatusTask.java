@@ -67,7 +67,7 @@ public class UpdatePalnStatusTask {
 	/**
 	 * updated ky
 	 */
-	@Scheduled(cron = "0/10 * *  * * ? ") // 每100秒执行一次
+	@Scheduled(cron = "0/100 * *  * * ? ") // 每100秒执行一次
 	public void updateTeaPlanStatus() {
 		// logger.debug(new Date());
 		// logger.debug("检查当前是否有超时的教评计划");
@@ -97,7 +97,7 @@ public class UpdatePalnStatusTask {
 				}
 				// 占比计算
 				// 比例暂时固定
-				double avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + stuAvgScore * 0.4;
+				double avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + (stuAvgScore * 20) * 0.4;
 				avgScore = DoubleUtil.round(avgScore, 2);
 				teacherPlan.setScore(avgScore);
 				selectListUpdate.add(teacherPlan);

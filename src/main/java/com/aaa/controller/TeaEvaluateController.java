@@ -65,7 +65,7 @@ public class TeaEvaluateController extends BaseController {
     @GetMapping("/showDetailPage")                                              
     public String editPage(Model model, Long planid,Long classid) {             
     	model.addAttribute("planid", planid);                                     
-    	model.addAttribute("classid", classid);                                   
+    	model.addAttribute("classid", classid);                              
         return "admin/teaEvaluate/showDetail";                                  
     }                                                                           
     /**                                                                         

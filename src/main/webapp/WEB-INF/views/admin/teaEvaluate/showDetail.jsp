@@ -45,6 +45,7 @@ var teaPlanDetailDataGrid;
            formatter : function(value, row, index) {
         	   /* 
         	   	根据类型判断等级(有两个类型因为成绩计算方式不一致)
+        	   	现在需要考虑 做个动态的 
         	   */
         	   if(row.type == 1){
         		   switch (row.score) {
@@ -61,15 +62,15 @@ var teaPlanDetailDataGrid;
 	               	}
         	   	}else if(row.type == 2){
         	   		switch (row.score) {
-	                   case 5:
-	                       return '差';
 	                   case 10:
-	                       return '较差';
-	                   case 15:
-	                       return '一般';
+	                       return '差';
 	                   case 20:
+	                       return '较差';
+	                   case 30:
+	                       return '一般';
+	                   case 40:
 	                       return '好';
-	                   case 25:
+	                   case 50:
 	                       return '很好';
 	               	}
         	   	}

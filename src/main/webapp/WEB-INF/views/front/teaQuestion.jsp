@@ -35,10 +35,41 @@ var questions="";
 		questions=data;//后台传过来的数据，赋值给全局变量questions
 		}
 	    });
-/* 现在有两个分数 每套总分为100分去计算(暂定)   */
-var itemList=["10","8","6","4","2"];
-var itemList2 = ["25","20","15","10","5"];
+/* 现在有两个分数 每套总分为100分去计算(暂定) type = 1  */
+var itemList=new Array(5);
+getItemList(itemList,1);
+
+//设置 type=2 的得分数组
+var itemList2 = new Array(5);
+getItemList(itemList2,2);
+
+/**
+ * 计算数组的生成不再使用固定的模式 
+ */
+function getItemList(item,type) {
+	// 计算个数
+	var countType2 = 0;
+	for (var i = 0; i < questions.length; i++) {
+		if (questions[i].questionType == type) {
+			countType2++;
+		}
+	}
+	if(countType2 != 0){
+		//各项总分数
+		var s3 = 100/countType2;
+		var res2 = s3/5; 
+		for (var i = 0; i < 5; i++) {
+			item[i] = s3;
+			s3 = s3 - res2;
+		}
+	}
+}
+/**
+ * 展示 不参与计算
+ */
 var itemList3 = ["5","4","3","2","1"];
+
+
 var activeQuestion=1; //当前操作的考题编号
 var questioned = 0; //
 var checkQues = []; //已做答的题的集合

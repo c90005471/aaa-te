@@ -94,7 +94,7 @@ public class TeaEvaluateController extends BaseController {
          pageInfo.setCondition(condition);
     	/*Map map = new HashMap();                                                  
     	map.put("planid", planid);     */                                           
-    	teacherDetailService.selectByplanid( pageInfo);    
+    	teacherDetailService.selectByplanid(pageInfo);    
     	return pageInfo;                                                   
     }                                                                           
                                                                                 

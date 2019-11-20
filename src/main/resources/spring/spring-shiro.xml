@@ -73,6 +73,7 @@
                 /webhooks = anon
                 /login = anon
                 /front/** = anon
+                /weChatFtp/** anon
                 /** = user
             </value>
         </property>

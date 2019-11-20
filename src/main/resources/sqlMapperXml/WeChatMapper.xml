@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.WeChatMapper">
+    <select id="getWechatResources" resultType="map">
+        select * from wechat_resources where 1=1
+        <if test=" searchName != null ">
+            and name like  concat(concat('%',#{searchName}),'%')
+        </if>
+        <if test=" category != null ">
+            and category = ${category}
+        </if>
+	</select>
+
+    <insert id="addWechatResources" parameterType="com.aaa.model.WechatResources">
+      INSERT into wechat_resources (type,url,name,created_time,remaks,category) VALUES (#{type},#{url},#{name},NOW(),#{remaks},#{category})
+    </insert>
+
+</mapper>

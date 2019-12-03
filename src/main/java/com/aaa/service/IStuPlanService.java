@@ -19,8 +19,13 @@ public interface IStuPlanService extends IService<StuPlan> {
 	void selectDataGrid(PageInfo pageInfo);
 
 	List<Map> selectPlanStuList(Map<String, Object> condition);
-	
-	//根据班级id和教师no去查stu_plan
+
+	/**
+	 * 根据班级id和教师no去查stu_plan
+	 * @param classId
+	 * @param teacherno
+	 * @return
+	 */
 	StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId,Long teacherno);
 	
 }

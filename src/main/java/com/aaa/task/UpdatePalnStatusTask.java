@@ -139,8 +139,11 @@ public class UpdatePalnStatusTask {
 					scoreSum += Double.parseDouble(avgscoreMap.get("avgscore") + "");
 				}
 			}
-			scoreSum = DoubleUtil.round(scoreSum, 2);// 小数点后取两位
-//			return scoreSum / avgscoreList.size();
+			/**
+			 * 	计算学生自评最终得分
+			 *  小数点后取两位
+			 */
+			scoreSum = DoubleUtil.round(scoreSum, 2) / avgscoreList.size();
 			return scoreSum;
 		} else {
 			return scoreSum;

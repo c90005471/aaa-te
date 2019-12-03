@@ -54,7 +54,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>选择要添加的类型</td>
+                    <td>选择要添加的类别</td>
                     <td>
                         <select id="category" name="category" style="width:150px; height:30px;" class="easyui-combobox combobox-f combo-f textbox-f">
                             <option value="0">实战</option>

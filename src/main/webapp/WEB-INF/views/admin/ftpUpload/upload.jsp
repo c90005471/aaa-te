@@ -139,7 +139,7 @@
                     <td>
                         <input id="searchName" name="searchName" placeholder="搜索视频/图片名称"/>
                     </td>
-                    <th>视频/图片名称:</th>
+                    <th>视频/图片类型:</th>
                     <td>
                         <select id="category" name="category" class="easyui-combobox combobox-f combo-f textbox-f" style="width: 160px">
                             <option value="">全部</option>

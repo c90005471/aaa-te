@@ -76,6 +76,7 @@
     
     <!-- 根据id和no查询学生自评计划 -->
     <select id = "selectPlanInfoByClassIdAndTeaNo" parameterType="Map" resultMap="BaseResultMap">
-    	select * from stu_plan where classId =#{classId} and teacherno = #{teacherno} and dostatus = 1 ORDER BY begintime desc limit 1
+		select * from stu_plan where classId =#{classId} and teacherno = #{teacherno}
+        and substr(createtime,1,7) = #{makeDate} and dostatus = 1 ORDER BY begintime desc limit 1
     </select>
 </mapper>

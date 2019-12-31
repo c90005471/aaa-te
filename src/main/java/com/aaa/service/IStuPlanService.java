@@ -1,5 +1,6 @@
 package com.aaa.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,6 @@ public interface IStuPlanService extends IService<StuPlan> {
 	 * @param teacherno
 	 * @return
 	 */
-	StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId,Long teacherno);
+	StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId, Long teacherno, Date makeDate);
 	
 }

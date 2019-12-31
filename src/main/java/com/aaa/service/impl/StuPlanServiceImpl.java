@@ -1,10 +1,12 @@
 package com.aaa.service.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.aaa.commons.result.PageInfo;
+import com.aaa.commons.utils.DateUtil;
 import com.aaa.model.StuPlan;
 import com.aaa.mapper.StuPlanMapper;
 import com.aaa.service.IStuPlanService;
@@ -43,11 +45,14 @@ public class StuPlanServiceImpl extends ServiceImpl<StuPlanMapper, StuPlan> impl
 	}
 	
 	@Override
-	public StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId, Long teacherno) {
+	public StuPlan selectPlanInfoByClassIdAndTeaNo(Long classId, Long teacherno, Date makeDate) {
 		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("classId", classId);
 		map.put("teacherno", teacherno);
+		String date = DateUtil.fromDateToString(makeDate);
+		//设置比对月份
+		map.put("makeDate", date.substring(0, 7));
 		return stuPlanMapper.selectPlanInfoByClassIdAndTeaNo(map);
 	}
-	
+
 }

@@ -83,14 +83,14 @@ public class UpdatePalnStatusTask {
 				teacherPlan.setDostatus(1);
 				// 计算最终得分，计入数据库教评计划表中
 				Map<String, Double> getMap = getTeacherFenPlanScore(teacherPlan.getId());
-				// 授课评分 40
+				// 授课评分 50
 				double teaAvgScore = getMap.get("scoreSum") == null ? 0d : getMap.get("scoreSum");
-				// 班级学校 20
+				// 班级学校 10
 				double classAvgScore = getMap.get("classScoreSum") == null ? 0d : getMap.get("classScoreSum");
 				// 学生自评 40
-				// 根据班级id和老师no 去查询 stu_plan
+				// 根据班级id和老师no和年月 去查询 stu_plan
 				StuPlan stuplan = stuPlanService.selectPlanInfoByClassIdAndTeaNo(teacherPlan.getClassid(),
-						teacherPlan.getTeacherno());
+						teacherPlan.getTeacherno(),teacherPlan.getMaketime());
 				double stuAvgScore = 0d;
 				if (stuplan != null) {
 					stuAvgScore = stuplan.getScore();

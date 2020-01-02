@@ -67,7 +67,7 @@ public class UpdatePalnStatusTask {
 	/**
 	 * updated ky
 	 */
-	@Scheduled(cron = "0/100 * *  * * ? ") // 每100秒执行一次
+	@Scheduled(cron = "0/10 * *  * * ? ") // 每100秒执行一次
 	public void updateTeaPlanStatus() {
 		// logger.debug(new Date());
 		// logger.debug("检查当前是否有超时的教评计划");
@@ -79,7 +79,6 @@ public class UpdatePalnStatusTask {
 		List<TeacherPlan> selectListUpdate = new ArrayList<TeacherPlan>();
 		if (selectList != null && selectList.size() > 0) {
 			for (TeacherPlan teacherPlan : selectList) {
-				// logger.debug("计划Id"+teacherPlan.getId()+"超时，将被强制设置为已关闭状态");
 				teacherPlan.setDostatus(1);
 				// 计算最终得分，计入数据库教评计划表中
 				Map<String, Double> getMap = getTeacherFenPlanScore(teacherPlan.getId());
@@ -92,12 +91,18 @@ public class UpdatePalnStatusTask {
 				StuPlan stuplan = stuPlanService.selectPlanInfoByClassIdAndTeaNo(teacherPlan.getClassid(),
 						teacherPlan.getTeacherno(),teacherPlan.getMaketime());
 				double stuAvgScore = 0d;
-				if (stuplan != null) {
+				double avgScore = 0d;
+				/**
+				 * 计算教评分数占比计算
+				 * 	1.如果有自评 则计算教评+自评
+				 * 	2.如果没有自评 则计算 教评 百分比
+				 */
+				if (stuplan != null && stuplan.getScore() != 0) {
 					stuAvgScore = stuplan.getScore();
+					avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + (stuAvgScore * 20) * 0.4;
+				}else {
+					avgScore = (teaAvgScore * 0.5 + classAvgScore * 0.1) / 0.6;
 				}
-				// 占比计算
-				// 比例暂时固定
-				double avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + (stuAvgScore * 20) * 0.4;
 				avgScore = DoubleUtil.round(avgScore, 2);
 				teacherPlan.setScore(avgScore);
 				selectListUpdate.add(teacherPlan);
@@ -118,7 +123,8 @@ public class UpdatePalnStatusTask {
 					scoreSum += Double.parseDouble(avgscoreMap.get("avgscore") + "");
 				}
 			}
-			scoreSum = DoubleUtil.round(scoreSum, 2);// 小数点后取两位
+			// 小数点后取两位
+			scoreSum = DoubleUtil.round(scoreSum, 2);
 			return scoreSum / avgscoreList.size();
 		} else {
 			return scoreSum;

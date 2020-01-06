@@ -34,4 +34,11 @@ public interface ITeaQuestionService extends IService<TeaQuestion>{
      *   分模块  教评
      */
 	List<TeaQuestion> selecFentListByRoleId(Long roleId);
+
+    /**
+     * 查询权限+所属校区下的考核点
+     * @param roleId
+     * @return
+     */
+    List<TeaQuestion> selectNewListByRoleId(Long roleId,String organiztionid);
 }

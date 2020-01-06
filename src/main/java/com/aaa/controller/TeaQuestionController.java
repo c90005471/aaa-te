@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.aaa.service.ITblClassService;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ import com.aaa.service.ITeaQuestionService;
 public class TeaQuestionController extends BaseController{
 	@Autowired
 	private ITeaQuestionService teaQuestionService;
+	@Autowired
+    private ITblClassService tblClassService;
 	
 	/**
 	 * 教师考核点管理页面
@@ -50,7 +53,6 @@ public class TeaQuestionController extends BaseController{
     }
 	/**
 	 * 教师考核点管理列表
-	 * @param student
 	 * @param page
 	 * @param rows
 	 * @param sort
@@ -103,7 +105,16 @@ public class TeaQuestionController extends BaseController{
         for (Role role : rolesList) {
             ids.add(role.getId());
         }
+        //查询出考评点所属的校区信息
+        List<Map<String, Object>> mapList = tblClassService.questionAndOrganTree(id);
+        List<Long> oids = new ArrayList<Long>();
+        if (mapList != null && mapList.size() > 0){
+            for (int i = 0; i < mapList.size(); i++) {
+                oids.add(Long.parseLong(mapList.get(i).get("oid") + ""));
+            }
+        }
         model.addAttribute("roleIds", ids);
+        model.addAttribute("organIds", oids);
         model.addAttribute("QuestionVo", questionVo);
         return "admin/TeaQuestion/teaQuestionEdit";
     }

@@ -32,7 +32,16 @@
             required: true,
             panelHeight : 'auto'
         });
-        
+        /**
+         * 加载校区
+         */
+        $('#questionAddOrganId').combotree({
+            url : '${path }/tblClass/organizationTree',
+            multiple: true,
+            required: true,
+            panelHeight : 'auto'
+        });
+
     });
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -46,6 +55,12 @@
                 <tr>
                 	<td>教师角色</td>
                     <td><select id="questionAddRoleIds" name="roleIds" style="width: 140px; height: 29px;"></select></td>
+                </tr>
+                <tr>
+                    <td>选择校区</td>
+                    <td>
+                        <select id="questionAddOrganId" name="organIds" style="width: 140px; height: 29px;"></select>
+                    </td>
                 </tr>
             </table>
         </form>

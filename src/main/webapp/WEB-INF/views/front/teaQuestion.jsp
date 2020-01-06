@@ -64,9 +64,6 @@ function getItemList(item,type) {
 		}
 	}
 }
-/**
- * 展示 不参与计算
- */
 var itemList3 = ["5","4","3","2","1"];
 
 
@@ -107,14 +104,8 @@ function showQuestion(id){
     var questionType = question.questionType;
     var item="";
     for(var i=0;i<items.length;i++){
-    	/* 对问题类型进行判断如果为1 则适用于第一个分数数组 如果为2 则适用于第二个分数数组  */
-    	if(questionType == 1){
-        	item ="<li class='question_info' onclick='clickTrim(this)' id='item"
-                +i+"'>"+itemList3[i]+"&nbsp;<input type='radio' name='item' value='"+itemList[i]+"'>&nbsp;"+items[i]+"</li>";
-    	}else{
-            item ="<li class='question_info' onclick='clickTrim(this)' id='item"
-                +i+"'>"+itemList3[i]+"&nbsp;<input type='radio' name='item' value='"+itemList2[i]+"'>&nbsp;"+items[i]+"</li>";
-    	}
+		item ="<li class='question_info' onclick='clickTrim(this)' id='item"
+                +i+"'>"+itemList3[i]+"&nbsp;<input type='radio' name='item' value='"+itemList3[i]+"'>&nbsp;"+items[i]+"</li>";
         $(".question").append(item);
     }
     $(".question").attr("id","question"+id);

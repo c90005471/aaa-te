@@ -328,7 +328,8 @@ public class FrontController extends BaseController {
          * 查询问题需要先查询出该教师属于什么角色
          */
         UserVo userVo = userService.selectVoById(questionid);
-        Long roleId = 2l;//默认是教员的题目
+        //默认是教员的题目
+        Long roleId = 2L;
         if (userVo != null && userVo.getRolesList() != null && userVo.getRolesList().size() > 0) {
             //获取该教师的角色信息
             roleId = userVo.getRolesList().get(0).getId();
@@ -337,8 +338,9 @@ public class FrontController extends BaseController {
 //		EntityWrapper<TeaQuestion> wrapper = new EntityWrapper<TeaQuestion>();
 //		TeaQuestionVo teaQuestionVo = new TeaQuestionVo();
 //		wrapper.setEntity(teaQuestion);
-//		wrapper.addFilter("questiontype = {0}", type);// 添加过滤条件
-        List<TeaQuestion> selectList = iTeacherQuestionService.selectListByRoleId(roleId);
+        // 添加过滤条件
+//		wrapper.addFilter("questiontype = {0}", type);
+        List<TeaQuestion> selectList = iTeacherQuestionService.selectNewListByRoleId(roleId,userVo.getOrganizationPid()+"");
         Map<Integer, Long> questionIdMap = new HashMap<Integer, Long>();
         //将所有的知识点封装到试题列表中
         for (int i = 0; i < selectList.size(); i++) {
@@ -711,9 +713,8 @@ public class FrontController extends BaseController {
 
     /**
      * 前台入学测试显示试题题目
-     *
-     * @param chapterid
      * @param session
+     * @param quesType
      * @return
      */
     @RequestMapping("/findTestQuestion")

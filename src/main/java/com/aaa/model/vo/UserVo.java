@@ -31,7 +31,8 @@ public class UserVo implements Serializable {
 	@JsonIgnore
 	private String password;
 	@JsonIgnore
-	private String salt; // 密码加密盐
+	// 密码加密盐
+	private String salt;
 
 	private Integer sex;
 
@@ -51,6 +52,10 @@ public class UserVo implements Serializable {
 
 	private List<Role> rolesList;
 
+	/**
+	 * 校区ID
+	 */
+	private Integer organizationPid;
 	private String organizationName;
 
 	private String roleIds;
@@ -201,7 +206,14 @@ public class UserVo implements Serializable {
 	public void setCreatedateEnd(Date createdateEnd) {
 		this.createdateEnd = createdateEnd;
 	}
-	
+
+	public Integer getOrganizationPid() {
+		return organizationPid;
+	}
+
+	public void setOrganizationPid(Integer organizationPid) {
+		this.organizationPid = organizationPid;
+	}
 
 	/**
 	 * 比较vo和数据库中的用户是否同一个user，采用id比较

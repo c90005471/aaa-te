@@ -94,14 +94,23 @@ public class UpdatePalnStatusTask {
 				double avgScore = 0d;
 				/**
 				 * 计算教评分数占比计算
-				 * 	1.如果有自评 则计算教评+自评
+				 * 	1.如果有自评有班级 则计算教评(50)+班级(10)+自评(40)
 				 * 	2.如果没有自评 则计算 教评 百分比
+				 * 	3.如果没有班级 则教评按照 60 计算
 				 */
-				if (stuplan != null && stuplan.getScore() != 0) {
+				if (stuplan != null && stuplan.getScore() != 0d) {
 					stuAvgScore = stuplan.getScore();
-					avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + (stuAvgScore * 20) * 0.4;
+					if (classAvgScore > 0){
+						avgScore = teaAvgScore * 0.5 + classAvgScore * 0.1 + (stuAvgScore * 20) * 0.4;
+					}else {
+						avgScore = teaAvgScore * 0.6 + (stuAvgScore * 20) * 0.4;
+					}
 				}else {
-					avgScore = (teaAvgScore * 0.5 + classAvgScore * 0.1) / 0.6;
+					if (classAvgScore > 0d){
+						avgScore = (teaAvgScore * 0.5 + classAvgScore * 0.1) / 0.6;
+					}else {
+						avgScore = teaAvgScore;
+					}
 				}
 				avgScore = DoubleUtil.round(avgScore, 2);
 				teacherPlan.setScore(avgScore);
@@ -190,9 +199,10 @@ public class UpdatePalnStatusTask {
 					}
 				}
 			}
-			scoreSum = DoubleUtil.round(scoreSum, 2);// 小数点后取两位
-			resultMap.put("scoreSum", scoreSum);
-			resultMap.put("classScoreSum", classScoreSum);
+			// 小数点后取两位
+			scoreSum = DoubleUtil.round(scoreSum, 2);
+			resultMap.put("scoreSum", scoreSum / (0.05 * count));
+			resultMap.put("classScoreSum", classScoreSum / (0.05 * classCount));
 			return resultMap;
 		} else {
 			resultMap.put("scoreSum", scoreSum);

@@ -2,7 +2,6 @@
 <%@ include file="/commons/global.jsp" %>
 <script type="text/javascript">
     var teacherQuestionDataGrid;
-
     $(function() {
         teacherQuestionDataGrid = $('#teacherQuestionDataGrid').datagrid({
             url :'${path }/teacherQuestion/dataGrid',
@@ -29,9 +28,13 @@
                 /* align:'center', */
                 sortable : true
             }, {
-            	 width : '150',
-                 title : '角色',
-                 field : 'rolesList'
+                width : '150',
+                title : '角色',
+                field : 'rolesList'
+            }, {
+                width : '150',
+                title : '校区',
+                field : 'names'
             },{
                 field : 'action',
                 align:'center',
@@ -61,7 +64,7 @@
         parent.$.modalDialog({
             title : '添加',
             width : 500,
-            height : 350,
+            height : 380,
             href : '${path }/teacherQuestion/addPage',
             buttons : [ {
                 text : '添加',
@@ -109,7 +112,7 @@
         parent.$.modalDialog({
             title : '编辑',
             width : 500,
-            height : 350,
+            height : 380,
             href : '${path }/teacherQuestion/editPage?id=' + id,
             buttons : [ {
                 text : '确定',
@@ -131,28 +134,9 @@
     } */
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
-   <!-- <div data-options="region:'north',border:false" style="height: 30px; overflow: hidden;background-color: #fff">
-        <form id="searchStuForm">
-            <table>
-                <tr>
-                    <th>姓名:</th>
-                    <td><input name="stuname" placeholder="请输入学生姓名"/></td>
-                    <th>学号:</th>
-                    <td>
-                        <input name="stuno" placeholder="请输入学号"/>
-                   		<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-magnifying-glass',plain:true" onclick="searchStuFun();">查询</a>
-                    	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-x-circle',plain:true" onclick="cleanStuFun();">清空</a>
-                    </td>                    
-                </tr>
-            </table>
-        </form>
-    </div> -->
     <div data-options="region:'center',border:true,title:'教师考核点'">
         <table id="teacherQuestionDataGrid" data-options="fit:true,border:false"></table>
     </div>
-    <!-- <div data-options="region:'west',border:true,split:false,title:'组织机构'"  style="width:150px;overflow: hidden; ">
-        <ul id="classesTree" style="width:160px;margin: 10px 10px 10px 10px"></ul>
-    </div> -->
 </div>
 <div id="teacherQuestionToolbar" style="display: none;">
     <shiro:hasPermission name="/teacherQuestion/add">

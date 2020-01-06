@@ -20,6 +20,8 @@ public class TeaQuestion {
 	private String questionname;
 	/**问题类型**/
 	private String questiontype;
+	private int type;
+	private int status;
 	
 	
 	public String getQuestiontype() {
@@ -45,7 +47,23 @@ public class TeaQuestion {
 	public void setQuestionname(String questionname) {
 		this.questionname = questionname;
 	}
-	
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return JsonUtils.toJson(this);

@@ -29,4 +29,9 @@ public interface ITblClassService extends IService<TblClass> {
 	// void deleteByClassId(Long id);
 
 	List<TblClass> selectByClassname(String classname);
+
+	List<Tree> organizationTree(String flag);
+
+	List<Map<String, Object>> questionAndOrganTree(Long id);
+
 }

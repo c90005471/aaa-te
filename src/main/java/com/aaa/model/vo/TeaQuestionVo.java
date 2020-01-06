@@ -30,6 +30,10 @@ public class TeaQuestionVo implements Serializable{
 	
 	/** 类型 */ 
 	private int type;
+	/**
+	 * 校区信息
+	 */
+	private String organIds;
 	
 	
 	private List<Role> rolesList;
@@ -79,5 +83,12 @@ public class TeaQuestionVo implements Serializable{
 	public void setType(int type) {
 		this.type = type;
 	}
-	
+
+	public String getOrganIds() {
+		return organIds;
+	}
+
+	public void setOrganIds(String organIds) {
+		this.organIds = organIds;
+	}
 }

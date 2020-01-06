@@ -71,6 +71,7 @@ public class TblClassController extends BaseController {
     	return tblClassService.selectTree(flag);
     }
 
+
     @PostMapping("/dataGrid")
     @ResponseBody
     public PageInfo dataGrid(TblClass tblClass, Integer page, Integer rows, String sort,String order) {
@@ -185,5 +186,15 @@ public class TblClassController extends BaseController {
     		}
     	}
     	return flag;
+    }
+
+    /**
+     * 组织树
+     * @return
+     */
+    @RequestMapping("/organizationTree")
+    @ResponseBody
+    public Object organizationTree(String flag) {
+        return tblClassService.organizationTree(flag);
     }
 }

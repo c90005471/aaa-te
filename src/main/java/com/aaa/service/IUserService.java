@@ -34,5 +34,5 @@ public interface IUserService extends IService<User> {
     List<Tree> selectAllTeacher(Long id);
 
 	List<User> selectUserByRoleId(Long roleid);
-    
+
 }

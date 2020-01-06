@@ -15,7 +15,7 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
-
+        <result column="organizationPid" property="organizationPid" jdbcType="INTEGER"/>
         <result column="organizationName" property="organizationName" jdbcType="VARCHAR"/>
 
         <collection property="rolesList" ofType="Role">
@@ -43,6 +43,7 @@
         t.create_time,
         phone,
         email,
+        s.pid as organizationPid,
         s.`name` AS organizationName,
         o.id AS roleId,
         o.`name` AS roleName

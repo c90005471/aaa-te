@@ -5,6 +5,8 @@
 		<id column="id" property="id" jdbcType="BIGINT"/>
         <result column="questionname" property="questionname" jdbcType="VARCHAR"/>
         <result column="type" property="questiontype" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
 	</resultMap>
 	<resultMap id="QuestionVoResultMap" type="com.aaa.model.vo.TeaQuestionVo">
         <id column="id" property="id" jdbcType="BIGINT"/>
@@ -32,14 +34,17 @@
             t.id = #{id}
         </where>
     </select>
-    <select id="selectQuestionPage" resultType="Map">
+    <!--新增 和校区关联 所以根据校区查询所拥有的考核点-->
+    <select id="selectQuestionPage" resultType="Map" parameterType="map">
         SELECT
-        t.id, t.questionname,group_concat(r.`name`) AS rolesList
+        t.id, t.questionname,group_concat(distinct r.`name`) AS rolesList,group_concat(distinct o.`name`) as names
         FROM
         teacherquestion t
         left join teaquestion_role e on t.id = e.question_id
         left join role r on  r.id = e.role_id
-        where t.status = 1 
+        left JOIN question_organiztion q on q.questionid = t.id
+        left join organization o on q.organiztionid = o.id
+        where t.status = 1
         GROUP BY t.id
     </select>
     <select id="selectListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
@@ -67,4 +72,32 @@
             r.id = #{roleId} and t.id>24
         </where>
     </select>
+    <!--
+       查询权限+校区下的考核点
+    -->
+    <select id="selectNewListByRoleId" resultMap="QuestionResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id, t.questionname,t.type
+        FROM
+        teacherquestion t
+        left join teaquestion_role e on t.id = e.question_id
+        left join role r on  r.id = e.role_id
+        RIGHT JOIN question_organiztion q on q.questionid = t.id
+        <where>
+            t.status = 1 and
+            q.organiztionid = #{organiztionid} and
+            r.id = #{roleId}
+        </where>
+    </select>
+    <select id="selectTeaQuestionById" resultMap="QuestionResultMap" parameterType="java.lang.Long">
+        SELECT
+        t.id, t.questionname,t.type type,t.status status
+        FROM
+        teacherquestion t
+        <where>
+            t.status = 1 and
+            t.id = #{id}
+        </where>
+    </select>
+
 </mapper>

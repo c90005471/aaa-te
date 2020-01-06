@@ -221,7 +221,49 @@ public class TblClassServiceImpl extends ServiceImpl<TblClassMapper, TblClass> i
 		List<TblClass> list = tblClassMapper.selectByClassname(classname);
 		return list;
 	}
-	
-	
-	
+
+	@Override
+	public List<Tree> organizationTree(String flag) {
+		List<Map> tblClassList = selectOrganizationTree(flag);//获取所有班级和组织信息
+		List<Tree> trees = new ArrayList<Tree>();
+		if (tblClassList != null) {
+			for (Map tblClass : tblClassList) {
+				Tree tree = new Tree();
+				tree.setId(Long.parseLong(tblClass.get("id")+""));
+				tree.setText(tblClass.get("classname")+"");
+				tree.setIconCls(tblClass.get("iconCls")+"");
+				tree.setPid(tblClass.get("orgid")==null?null:Long.parseLong(tblClass.get("orgid")+""));
+				trees.add(tree);
+			}
+		}
+		return trees;
+	}
+
+	@Override
+	public List<Map<String, Object>> questionAndOrganTree(Long id) {
+		return organizationMapper.questionAndOrganTree(id);
+	}
+
+	public List<Map> selectOrganizationTree(String flag) {
+		//查询所有的班级
+		List<Map> classList = new ArrayList<>();
+		//查询所有的组织，然后封装成TblClass对象，添加到classList中
+		EntityWrapper<Organization> wrapper = new EntityWrapper<Organization>();
+		wrapper.orderBy("seq");
+		wrapper.where("pid is null");
+		List<Organization> orgList = organizationMapper.selectList(wrapper);
+		for (Organization organization : orgList) {
+			Map tc= new HashMap();
+			tc.put("id",organization.getId());
+			tc.put("orgid",organization.getPid());
+			tc.put("classname",organization.getName());
+			tc.put("createtime",organization.getCreateTime());
+			tc.put("address",organization.getAddress());
+			tc.put("iconCls",organization.getIcon());
+			classList.add(tc);
+		}
+		return classList;
+	}
+
+
 }

@@ -25,6 +25,11 @@ public interface TeaQuestionMapper extends BaseMapper<TeaQuestion>{
 
 	List<TeaQuestion> selectListByRoleId(@Param("roleId")Long roleId);
 
-//分模块教评
+	//分模块教评
 	List<TeaQuestion> selecFentListByRoleId(@Param("roleId")Long roleId);
+
+	List<TeaQuestion> selectNewListByRoleId(@Param("roleId")Long roleId,@Param("organiztionid")String organiztionid);
+
+	TeaQuestion selectTeaQuestionById(@Param("id") Long id);
+
 }

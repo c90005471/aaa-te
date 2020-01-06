@@ -4,8 +4,7 @@
 <%@ include file="/commons/global.jsp"%>
 <script type="text/javascript">
 	$(function() {
-		
-		//编辑学生
+		//编辑考核点
 		$('#teacherQuestionEditForm').form({
 			url : '${path }/teacherQuestion/edit',
 			onSubmit : function() {
@@ -20,7 +19,8 @@
 				progressClose();
 				result = $.parseJSON(result);
 				if (result.success) {
-					parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+					parent.$.modalDialog.openner_dataGrid.datagrid('reload');
 					parent.$.modalDialog.handler.dialog('close');
 				} else {
 					var form = $('#teacherQuestionEditForm');
@@ -28,7 +28,9 @@
 				}
 			}
 		});
-		
+        /**
+		 * 加载角色
+         */
 		$('#questionAddRoleIds').combotree({
             url : '${path }/role/tree',
             parentField : 'pid',
@@ -39,11 +41,24 @@
             cascadeCheck : false,
             value : ${roleIds}
         });
+
+        /**
+		 * 加载校区
+         */
+        $('#questionAddOrganId').combotree({
+            url : '${path }/tblClass/organizationTree',
+            parentField : 'pid',
+            lines : true,
+            panelHeight : 'auto',
+            multiple : true,
+            required : true,
+            cascadeCheck : false,
+            value : ${organIds}
+        });
 	});
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title=""
-		style="overflow: hidden;padding: 3px;">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 3px;">
 		<form id="teacherQuestionEditForm" method="post">
 			<table class="grid">
 				<tr>
@@ -53,8 +68,16 @@
                 </tr>
                 <tr>
                 	<td>教师角色</td>
-                    <td><select id="questionAddRoleIds" name="roleIds" style="width: 140px; height: 29px;"></select></td>
+                    <td>
+						<select id="questionAddRoleIds" name="roleIds" style="width: 140px; height: 29px;"></select>
+					</td>
                 </tr>
+				<tr>
+					<td>选择校区</td>
+					<td>
+						<select id="questionAddOrganId" name="organIds" style="width: 140px; height: 29px;"></select>
+					</td>
+				</tr>
 			</table>
 		</form>
 	</div>

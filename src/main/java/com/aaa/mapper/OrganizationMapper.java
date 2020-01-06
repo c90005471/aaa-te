@@ -28,7 +28,7 @@ public interface OrganizationMapper extends BaseMapper<Organization> {
             "t.id, t.questionname,t.type type,o.id oid,o.`name` " +
             "FROM " +
             "teacherquestion t " +
-            "left join question_organiztion q on t.id = q.questionid " +
+            "right join question_organiztion q on t.id = q.questionid " +
             "left join organization o on q.organiztionid = o.id " +
             "where o.pid is NULL " +
             "and t.id = #{id}")

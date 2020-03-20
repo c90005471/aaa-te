@@ -35,7 +35,10 @@ public class ExamPaper extends Model<ExamPaper> {
 	 * 试卷状态(0禁用,1启用)
 	 */
 	private Integer state;
-	private String stage;//阶段
+	/**
+	 * 阶段
+	 */
+	private String stage;
 	private Long creator;
 	private Date createtime;
 	private Long classid;

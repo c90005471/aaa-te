@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.ExamResultMapper">
+	
+	<insert id="insertExamResult" useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.ExamResult">
+	  	insert into
+	  	  exam_result (infoid,stuid,paperid,type,rightAnswer,answer,sum)
+	  	values
+	  	  (#{infoid},#{stuid},#{paperid},#{type},#{rightAnswer},#{answer},#{sum})
+	 </insert>
+
+	<select id="selectExamResultPage" resultType="Map">
+		SELECT * from (select er.id,ti.id tid,ti.topicname,er.rightAnswer,er.answer, COUNT(1) number from exam_result er
+		LEFT JOIN topic_info ti on ti.id = er.infoid
+		where er.sum = 0 and er.paperid = #{paperId}
+		GROUP BY er.infoid) a ORDER BY a.number desc
+	</select>
+
+	<select id="selectExamResultInfo" resultType="Map">
+		SELECT
+		(select `option` from topic_option too where too.infoid = ti.id LIMIT 0,1) A,
+		(select `option` from topic_option too where too.infoid = ti.id LIMIT 1,1) B,
+		(select `option` from topic_option too where too.infoid = ti.id LIMIT 2,1) C,
+		(select `option` from topic_option too where too.infoid = ti.id LIMIT 3,1) D
+		from topic_info ti where ti.id = #{tid}
+	</select>
+	
+	<select id="getQuestionsList" resultType="Map" parameterType="Map">
+		select er.id,ti.id tid,ti.topicname,er.rightAnswer,er.answer
+		from exam_result er, topic_info ti where  ti.id = er.infoid
+		and er.sum = 0 and er.paperid = #{paperid} and er.stuid = #{stuno}
+		limit #{pageNumber,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<select id="getQuestionsCount" resultType="int" parameterType="Map">
+		select count(1) len
+		from exam_result er, topic_info ti where  ti.id = er.infoid
+		and er.sum = 0 and er.paperid = #{paperid} and er.stuid =  #{stuno}
+	</select>
+
+	<select id="getLastPaper" resultType="Map" parameterType="Map">
+		select * from exam_record where stuid = #{stuid} ORDER BY id desc limit 1
+	</select>
+
+</mapper>

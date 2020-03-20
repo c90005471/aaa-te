@@ -192,4 +192,86 @@ public class ExamPaperController extends BaseController {
     	examPaperService.deletePaperInfoById(id);
         return renderSuccess("删除成功！");
     }
+
+    /**
+     * 跳转手动组卷页面
+     */
+    @GetMapping("/manualPage")
+    public String manualPage(Model model, Long id) {
+        ExamPaper examPaper = examPaperService.selectById(id);
+        model.addAttribute("examPaper",examPaper);
+        return "admin/examPaper/examManualPageShow";
+    }
+
+    /**
+     * 手动组卷回调的datagrid方法
+     * @param id  试卷id
+     */
+    @PostMapping("/questionInfoDataGrid")
+    @ResponseBody
+    public Object questionInfoDataGrid(Integer page, Integer rows, String sort, String order,Long id) {
+        PageInfo pageInfo = new PageInfo(page, rows, sort, order);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        condition.put("topictype", id);
+        pageInfo.setCondition(condition);
+        examPaperService.selectQuestionInfoPage(pageInfo);
+        return pageInfo;
+    }
+
+    /**
+     * 手动组卷添加试题
+     * @param paperid
+     * @param infoid
+     * @return
+     */
+    @PostMapping("/addPaperByManual")
+    @ResponseBody
+    public Object addPaperByManual(Integer paperid,Integer infoid){
+        int len =  examPaperService.addPaperByManual(paperid,infoid);
+        return len;
+    }
+
+    /**
+     * 新试卷列表页面
+     * @return
+     */
+    @RequestMapping("/newManager")
+    public String newManager(){
+        return "admin/newExamPaper/newExamPaper" ;
+    }
+
+    /**
+     * 新修改试题页
+     */
+    @GetMapping("/newEditPage")
+    public String newEditPage(Model model, Long id) {
+        ExamPaper examPaper = examPaperService.selectById(id);
+        model.addAttribute("examPaper",examPaper);
+        return "admin/newExamPaper/examPaperEdit";
+    }
+
+    /**
+     * 新添加试卷信息
+     */
+    @GetMapping("/newAddPage")
+    public String newAddPage(Model model) {
+        return "admin/newExamPaper/newExamPaperAdd" ;
+    }
+
+    /**
+     * 新编辑试题信息页
+     */
+    @PostMapping("/newEdit")
+    @ResponseBody
+    public Object newEdit(ExamPaper examPaper,String orgid,String classes) {
+        //查询 已经有的 examPaper
+        ExamPaper examPaper1 = examPaperService.selectById(examPaper.getId());
+        if (examPaper1 != null){
+            String[] strs =  classes.split(",");
+            for (int i = 0; i < strs.length; i++) {
+                examPaperService.addPaperClass(examPaper1.getId().intValue(),Integer.parseInt(strs[i]));
+            }
+        }
+        return renderSuccess("修改成功！");
+    }
 }

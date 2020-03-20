@@ -21,16 +21,17 @@
                 //返回树对象  
         	    var tree = $(this).tree;  
         	//选中的节点是否为叶子节点,如果不是叶子节点,清除所有右边的数据
-        		var isLeaf = tree('isLeaf', node.target);  
-        		if (!isLeaf) {  
+        		var isLeaf = tree('isLeaf', node.target);
+        		console.log(isLeaf);
+        		if (!isLeaf) {
         		    $("#examPaperToolbar").hide();//将添加按钮隐藏
-        		    examPaperDataGrid.datagrid('loadData', []); 
+        		    examPaperDataGrid.datagrid('loadData', []);
         			orgidExamPaper = node.id;
         		    classidExamPaper = null;
         		    $("#orgidExamPaper").val(orgidExamPaper);
         		    $("#classidExamPaper").val("");
         		    examPaperDataGrid.datagrid('load',$.serializeObject($('#examPaperSearchForm')));
-        		}else{ 		
+        		}else{
         		    //将classid传入到后台
         		    classidExamPaper=node.id;
         		    orgidExamPaper = null;
@@ -44,7 +45,7 @@
         			examPaperDataGrid.datagrid( {
                     	toolbar : '#examPaperToolbar'
                 	}
-                	
+
                 	);
         		}
             }
@@ -114,12 +115,15 @@
         }, {
             field : 'action',
             title : '操作',
-            width : 220,
+            width : 300,
             formatter : function(value, row, index) {
                 var str = '';
                 <shiro:hasPermission name="/examPaper/edit">
                 	str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-show" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPaperShowFun(\'{0}\');" >智能组卷</a>', row.id);
             	</shiro:hasPermission>
+                <shiro:hasPermission name="/examPaper/edit">
+                    str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-Manual" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPapeManualFun(\'{0}\');" >手动组卷</a>', row.id);
+                </shiro:hasPermission>
                 <shiro:hasPermission name="/examPaper/edit">
                     str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-edit" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPaperEditFun(\'{0}\');" >编辑</a>', row.id);
                 </shiro:hasPermission>
@@ -132,6 +136,7 @@
         } ] ],
         onLoadSuccess:function(data){
         	$('.examPaper-easyui-linkbutton-show').linkbutton({text:'智能组卷'});
+            $('.examPaper-easyui-linkbutton-Manual').linkbutton({text:'手动组卷'});
             $('.examPaper-easyui-linkbutton-edit').linkbutton({text:'编辑'});
             $('.examPaper-easyui-linkbutton-del').linkbutton({text:'删除'});
         }//,
@@ -153,6 +158,25 @@ function examPaperShowFun(id){
         width : 1200,
         height : 580,
         href :  '${path}/examPaper/showPage?id=' + id
+    });
+}
+/** 
+ * @author ky
+ * @date 2020/2/17   
+ * 手动组卷
+**/ 
+function examPapeManualFun(id) {
+    if (id == undefined) {
+        var rows = examPaperDataGrid.datagrid('getSelections');
+        id = rows[0].id;
+    } else {
+        examPaperDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+    }
+    parent.$.modalDialog({
+        title : '手动组卷',
+        width : 1200,
+        height : 580,
+        href :  '${path}/examPaper/manualPage?id=' + id
     });
 }
 /**

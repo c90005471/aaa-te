@@ -49,4 +49,16 @@
 			and s.phone = #{phone}
 			and NOW() between e.starttime and date_add(e.starttime, interval e.needtime minute)
     </select>
+
+    <select id="getExamPaperByMap" parameterType="map" resultType="com.aaa.model.ExamPaper">
+    	select e.* from exam_paper e
+			left join student s on s.class_id = e.classid
+			where e.id =#{id}
+			and  s.stuno = #{stuno}
+			and s.phone = #{phone}
+			and NOW() between e.starttime and date_add(e.starttime, interval e.needtime minute)
+    </select>
+    <insert id="insertPaperClass" parameterType="map">
+        insert into paper_class (classid,paperid) values (#{classid},#{paperid})
+    </insert>
 </mapper>

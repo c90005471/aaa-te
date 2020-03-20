@@ -34,4 +34,11 @@ public interface ITblClassService extends IService<TblClass> {
 
 	List<Map<String, Object>> questionAndOrganTree(Long id);
 
+	/**
+	 * 根据组织查询班级
+	 * @param orgid
+	 * @return
+	 */
+	List<Tree> getTree(int orgid);
+
 }

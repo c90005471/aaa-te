@@ -6,6 +6,9 @@ import java.util.Map;
 import com.aaa.model.ExamPaper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
+
 /**
  * 类名称：ExamPaperMapper
  * 类描述： 
@@ -19,5 +22,10 @@ public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
 	List<ExamPaper> findExamPaperByMap(Map<String, Object> map);
 
 	List<ExamPaper> selectExamPaperByMap(Map<String, Object> columnMap);
+
+	/**
+	 * 增加 试卷和 班级之间的中间表
+	 */
+	void insertPaperClass(Map<String, Object> map);
 
 }

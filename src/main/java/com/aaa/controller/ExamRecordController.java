@@ -125,4 +125,26 @@ public class ExamRecordController extends BaseController {
 		map.put("score", "成绩");
 		ExcelUitl.listToExcel(examRecordList, map, "成绩列表", 1000, resp);
     }
+	/***
+	 * 显示考试结果分析
+	 */
+	@RequestMapping("/showExamResult")
+	public String showExamResult(Long paperId,Model model){
+		model.addAttribute("paperId", paperId);
+		return "admin/examRecord/showExamResult";
+	}
+	/**
+	 * 考试记录页面回调方法
+	 * @return
+	 */
+	@PostMapping("/showExamResultDataGrid")
+	@ResponseBody
+	public Object showExamResultDataGrid(Integer page, Integer rows, String sort, String order,Long paperId) {
+		PageInfo pageInfo = new PageInfo(page, rows, sort, order);
+		Map<String, Object> condition = new HashMap<String, Object>();
+		condition.put("paperId", paperId);//试卷id
+		pageInfo.setCondition(condition);
+		examRecordService.selectResultDataGrid(pageInfo);
+		return pageInfo;
+	}
 }

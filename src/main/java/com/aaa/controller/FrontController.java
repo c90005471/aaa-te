@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.JFrame;
 
+import com.aaa.model.*;
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,21 +25,6 @@ import com.aaa.commons.base.BaseController;
 import com.aaa.commons.utils.ConstantUtils;
 import com.aaa.commons.utils.DateUtil;
 import com.aaa.commons.utils.StringUtils;
-import com.aaa.model.Answer;
-import com.aaa.model.Course;
-import com.aaa.model.Question;
-import com.aaa.model.StuEvaluate;
-import com.aaa.model.Student;
-import com.aaa.model.TblScl;
-import com.aaa.model.TblSclRecord;
-import com.aaa.model.TblSclRecorddetail;
-import com.aaa.model.TeaQuestion;
-import com.aaa.model.TeacherDetail;
-import com.aaa.model.TeacherPlan;
-import com.aaa.model.TestQuestion;
-import com.aaa.model.TestQuestionAnswer;
-import com.aaa.model.TestQuestionRecord;
-import com.aaa.model.Wordofmouth;
 import com.aaa.model.vo.DataVo;
 import com.aaa.model.vo.UserVo;
 import com.aaa.service.ICourseService;
@@ -902,4 +890,103 @@ public class FrontController extends BaseController {
         }
         return map;
     }
+
+    /**
+     * 跳转学生页面
+     */
+    @RequestMapping("/studentLogin")
+    public String studentLogin() {
+        return "front/student/studentLogin";
+    }
+
+    /**
+     * 检查学生是否允许登陆
+     */
+    @RequestMapping("/checkStudentLogin")
+    @ResponseBody
+    public Object checkStudentLogin(Long examPaperId, String stuno, String stuphone) {
+        boolean flag = studentService.checkStudentLogin(stuno, stuphone);
+        return flag;
+    }
+
+    /**
+     * 跳转试题页面
+     */
+    @RequestMapping("/toStudentPaper")
+    public String toStudentPaper(String stuno, String stuphone, Model model) {
+        model.addAttribute("stuno",stuno);
+        //查找学生信息
+        Student student = studentService.getStudentInfo(stuno,stuphone);
+        model.addAttribute("stuname",student.getStuname());
+        //查找学生最后一次考试的信息
+        Map<String, Object> map = examRecordService.getLastPaperBystuno(stuno);
+        model.addAttribute("paper",map == null ? 0 : map.get("paperid"));
+        return "front/student/studentPaper";
+    }
+
+    /**
+     * 获取菜单信息
+     * @return
+     */
+    @RequestMapping("/getStudentMenu")
+    @ResponseBody
+    public Object getStudentMenu(String stuid){
+        List<TreeMenu> treeMenus = studentService.getStudentMenu(stuid);
+        return treeMenus;
+    }
+
+    /**
+     * 获取错题列表
+     * @param pageSize
+     * @param pageNumber
+     * @param stuno
+     * @param paperId
+     * @return
+     */
+    @RequestMapping("/getQuestionsList")
+    @ResponseBody
+    public Object getQuestionsList(int pageSize,int pageNumber,String stuno,int paperId){
+        Map<String, Object> map = examRecordService.getQuestionsList(pageSize,pageNumber,stuno,paperId);
+        return map;
+    }
+
+    /**
+     * 新跳转考试登陆页面
+     */
+    @RequestMapping("/newExamLogin")
+    public String newExamLogin(HttpServletRequest request) {
+        return "front/exam/newExamLogin";
+    }
+
+    /**
+     * 新跳转试题页面
+     */
+    @RequestMapping("/toNewExamPaper")
+    public String toNewExamPaper(Long examPaperId, Long id, String stuno, String stuphone, Model model) {
+        //查询试卷是否有该学生 ,且考试时间在开始时间和结束时间之内
+        Map<String, Object> map = examPaperService.findExamPaperByMap(examPaperId, stuno, stuphone);
+        boolean flag = (boolean) map.get("flag");
+        if (flag) {
+            Long recordId = (Long) map.get("id");
+            //试卷id
+            model.addAttribute("paperId", examPaperId);
+            //考试记录id
+            model.addAttribute("id", recordId);
+            return "front/exam/examPaper";
+        } else {
+            return "front/exam/newExamLogin";
+        }
+    }
+
+    /**
+     * 新检查学生是否允许登陆
+     * ky
+     */
+    @RequestMapping("/newCheckExamLogin")
+    @ResponseBody
+    public Object newCheckExamLogin(Long examPaperId, String stuno, String stuphone) {
+        boolean flag = examPaperService.newCheckExamLogin(examPaperId, stuno, stuphone);
+        return flag;
+    }
+
 }

@@ -380,7 +380,7 @@ html,body {
 			
 		});
 	});
-	
+
 	//禁用鼠标右键
 	/*document.oncontextmenu = function(){
 	    return false;

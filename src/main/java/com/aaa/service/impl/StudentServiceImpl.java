@@ -11,10 +11,7 @@ import javax.validation.Valid;
 import com.aaa.commons.result.PageInfo;
 import com.aaa.commons.utils.ConstantUtils;
 import com.aaa.commons.utils.DateUtil;
-import com.aaa.model.Returnrecord;
-import com.aaa.model.Student;
-import com.aaa.model.StudentCompany;
-import com.aaa.model.StudentRecord;
+import com.aaa.model.*;
 import com.aaa.model.vo.StudentCompanyVo;
 import com.aaa.model.vo.StudentVo;
 import com.aaa.mapper.ReturnrecordMapper;
@@ -286,5 +283,40 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
 		}
 		return excelToListNew;
 	}
-	
+
+	@Override
+	public boolean checkStudentLogin(String stuno, String stuphone) {
+	    Map<String,Object> map = new HashMap<>();
+        map.put("stuno",stuno);
+        map.put("stuphone",stuphone);
+	    Map<String,Object> stuMap = studentMapper.checkStudentLogin(map);
+	    if (stuMap != null){
+            return true;
+        }
+		return false;
+	}
+
+	@Override
+	public List<TreeMenu> getStudentMenu(String stuid) {
+		TreeMenu treeMenu = new TreeMenu();
+		treeMenu.setText("考试记录");
+		Map<String,Object> map = new HashMap<>();
+		map.put("stuno",stuid);
+		Student student = studentMapper.getStudentInfo(map);
+		map.put("stuid",student.getId());
+		List<TreeMenu> nodes = studentMapper.getStudentExam(map);
+		treeMenu.setTreeMenuList(nodes);
+		List<TreeMenu> treeMenuList1 = new ArrayList<>();
+		treeMenuList1.add(treeMenu);
+		return treeMenuList1;
+	}
+
+	@Override
+	public Student getStudentInfo(String stuno, String stuphont) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("stuno",stuno);
+		map.put("stuphone",stuphont);
+		return studentMapper.getStudentInfo(map);
+	}
+
 }

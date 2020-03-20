@@ -111,5 +111,28 @@
     	and LENGTH(s.idno)=18  and s.idno like '41%' 
     	group by city
     </select>
+	
+	<select id="checkStudentLogin" resultType="Map" parameterType="Map">
+		select * from student where stuno = #{stuno} and phone = #{stuphone}
+	</select>
+	<select id="getStudentExam" resultType="com.aaa.model.TreeMenu" parameterType="Map">
+		select er.paperid nodeid,ep.title text from exam_record er,exam_paper ep
+		where er.paperid = ep.id and stuid = #{stuid}
+	</select>
+	
+	<select id="getStudentInfo" resultType="com.aaa.model.Student" parameterType="Map">
+		select  * from student
+		<where>
+			1 = 1
+			<if test="stuno != null ">
+				and stuno = #{stuno}
+			</if>
+			<if test="stuphone != null ">
+		  		and phone = #{stuphone}
+			</if>
+		</where>
+	</select>
+
+
     
 </mapper>

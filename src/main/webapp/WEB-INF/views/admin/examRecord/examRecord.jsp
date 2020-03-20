@@ -134,11 +134,13 @@
                 formatter : function(value, row, index) {
                     var str = '';
                     str += $.formatString('<a href="javascript:void(0)" class="examRecordPaper-easyui-linkbutton-show" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examRecordShowFun(\'{0}\');" >详情</a>', row.id);
+                    str += $.formatString('<a href="javascript:void(0)" class="examResultPaper-easyui-linkbutton-show" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examResultShowFun(\'{0}\');" >结果</a>', row.id);
                     return str;
                 }
             } ] ],
             onLoadSuccess:function(data){
-            	$('.examRecordPaper-easyui-linkbutton-show').linkbutton({text:'详情'});
+                $('.examRecordPaper-easyui-linkbutton-show').linkbutton({text:'详情'});
+                $('.examResultPaper-easyui-linkbutton-show').linkbutton({text:'结果'});
             }//,
             //toolbar : '#examPaperToolbar'
         });
@@ -160,6 +162,23 @@ function examRecordShowFun(id,classid) {
         width : 800,
         height : 400,
         href : '${path}/examRecord/showExamRecord?paperId=' + id
+    });
+}
+/**
+ * 考试结果分析
+ */
+function examResultShowFun(id,classid) {
+    if (id == undefined) {
+        var rows = examRecordPaperDataGrid.datagrid('getSelections');
+        id = rows[0].id;
+    } else {
+        examRecordPaperDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+    }
+    parent.$.modalDialog({
+        title : '结果',
+        width : 1000,
+        height : 400,
+        href : '${path}/examRecord/showExamResult?paperId=' + id
     });
 }
 /**

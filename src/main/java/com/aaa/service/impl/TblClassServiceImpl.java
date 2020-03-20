@@ -244,6 +244,24 @@ public class TblClassServiceImpl extends ServiceImpl<TblClassMapper, TblClass> i
 		return organizationMapper.questionAndOrganTree(id);
 	}
 
+	@Override
+	public List<Tree> getTree(int orgid) {
+		//根据组织获取所有的班级
+		List<Map<String,Object>> tblClassList = tblClassMapper.getTreeGrid(orgid);
+		List<Tree> trees = new ArrayList<Tree>();
+		if (tblClassList != null) {
+			for (Map tblClass : tblClassList) {
+				Tree tree = new Tree();
+				tree.setId(Long.parseLong(tblClass.get("id")+""));
+				tree.setText(tblClass.get("classname")+"");
+				tree.setIconCls(tblClass.get("iconCls")+"");
+				tree.setPid(tblClass.get("orgid")==null?null:Long.parseLong(tblClass.get("orgid")+""));
+				trees.add(tree);
+			}
+		}
+		return trees;
+	}
+
 	public List<Map> selectOrganizationTree(String flag) {
 		//查询所有的班级
 		List<Map> classList = new ArrayList<>();

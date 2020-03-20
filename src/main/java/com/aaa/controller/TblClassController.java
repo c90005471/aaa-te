@@ -197,4 +197,15 @@ public class TblClassController extends BaseController {
     public Object organizationTree(String flag) {
         return tblClassService.organizationTree(flag);
     }
+
+    /**
+     * 根据组织查询班级树
+     *
+     * @return
+     */
+    @RequestMapping("/getTree")
+    @ResponseBody
+    public Object getTree(int orgid) {
+        return tblClassService.getTree(orgid);
+    }
 }

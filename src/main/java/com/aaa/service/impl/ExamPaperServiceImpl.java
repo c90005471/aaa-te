@@ -248,6 +248,52 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		}
 		return false;
 	}
+
+	@Override
+	public void selectQuestionInfoPage(PageInfo pageInfo) {
+		Page<Map<String, Object>> page = new Page<Map<String, Object>>(pageInfo.getNowpage(), pageInfo.getSize());
+		page.setOrderByField(pageInfo.getSort());
+		page.setAsc(pageInfo.getOrder().equalsIgnoreCase("asc"));
+		List<Map<String, Object>> list = paperInfoMapper.selectQuestionInfoPage(page, pageInfo.getCondition());
+		pageInfo.setRows(list);
+		pageInfo.setTotal(page.getTotal());
+	}
+
+	@Override
+	public int addPaperByManual(Integer paperid, Integer infoid) {
+		int len = 0;
+		/**
+		 * 查询是否在试卷中存在如果不存在则添加
+		 */
+		Map<String,Object> params = new HashMap<>();
+		params.put("paperid",paperid);
+		params.put("infoid",infoid);
+		Map<String, Object> map = paperInfoMapper.selectPaperInfo(params);
+		if (map != null){
+			len = -1;
+		}else {
+			PaperInfo info = new PaperInfo();
+			info.setPaperid(Long.parseLong(paperid+""));
+			info.setInfoid(Long.parseLong(infoid+""));
+			len = paperInfoMapper.insert(info);
+		}
+		return len;
+	}
+
+	@Override
+	public boolean newCheckExamLogin(Long examPaperId, String stuno, String stuphone) {
+
+		return true;
+	}
+
+	@Override
+	public void addPaperClass(int paperid, int classid) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("paperid",paperid);
+		map.put("classid",classid);
+		examPaperMapper.insertPaperClass(map);
+	}
+
 	/**
 	 * 查询试卷是否有该学生
 	 */
@@ -300,7 +346,6 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 	}
 	/**
 	 * 获取试卷的试题
-	 * @param quesType
 	 * @return
 	 */
 	@Override
@@ -362,4 +407,5 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		map.put("questionIdTopicIdMap", questionIdTopicIdMap);
 		return map;
 	}
+
 }

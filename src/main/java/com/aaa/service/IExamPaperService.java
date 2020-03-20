@@ -34,5 +34,29 @@ public interface IExamPaperService extends  IService<ExamPaper>{
 
 	boolean checkExamLogin(Long examPaperId, String stuno, String stuphone);
 
+	void selectQuestionInfoPage(PageInfo pageInfo);
 
+	/**
+	 * 手动组卷添加试题
+	 * @param paperid
+	 * @param infoid
+	 * @return
+	 */
+	int addPaperByManual(Integer paperid,Integer infoid);
+
+	/**
+	 * 新 判断学生是否可以登陆
+	 * @param examPaperId
+	 * @param stuno
+	 * @param stuphone
+	 * @return
+	 */
+	boolean newCheckExamLogin(Long examPaperId, String stuno, String stuphone);
+
+	/**
+	 * 添加paperclass表数据
+	 * @param paperid
+	 * @param classid
+	 */
+	void addPaperClass(int paperid,int classid);
 }

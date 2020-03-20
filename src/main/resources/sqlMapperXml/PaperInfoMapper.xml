@@ -11,4 +11,11 @@
         </where>
         order by t.id
     </select>
+    <select id="selectQuestionInfoPage" resultType="Map">
+      select id,topicname from topic_info where topictype = #{topictype}
+    </select>
+
+    <select id="selectPaperInfo" resultType="Map" parameterType="Map">
+        select  * from paper_info where paperid = #{paperid} and infoid = #{infoid}
+    </select>
 </mapper>

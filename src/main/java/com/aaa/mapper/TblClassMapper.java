@@ -31,8 +31,8 @@ public interface TblClassMapper extends BaseMapper<TblClass> {
 	void updateClass(TblClass tblClass);
 	void deleteClassTeacherByClassId(Long id);
 
-List<Map> selectByClassid(@Param("class_id") Long classid);
-	
+	List<Map> selectByClassid(@Param("class_id") Long classid);
+
 	@Select("select t.user_id from  tbl_user_class t left join user u on u.id = t.user_id where t.class_id = #{class_id} and u.status=0")
 	@ResultType(Long.class)
 	List<Long> selectUseridListByClassid(@Param("class_id") Long classid);
@@ -45,4 +45,8 @@ List<Map> selectByClassid(@Param("class_id") Long classid);
 	@Select("select id,classname from tbl_class where classname = #{classname}")
 	@ResultType(TblClass.class)
 	List<TblClass> selectByClassname(String classname);
+
+	@Select("select * from tbl_class where orgid in (select id from organization where pid = #{orgid}) and graduate = 0")
+	@ResultType(Map.class)
+	List<Map<String,Object>> getTreeGrid(@Param("orgid") int orgid);
 }

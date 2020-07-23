@@ -7,7 +7,8 @@ var questionInfoDataGrid;
 var questionid = 2;
 $(function(){
 	examTypeDataGrid = $('#examTypeDataGrid').datagrid({
-	    url : '${path}/topicTypes/data?stage=${examPaper.stage}',
+	    <%--url : '${path}/topicTypes/data?stage=${examPaper.stage}',--%>
+	    url : '${path}/topicTypes/data',
 	    fit : true,
 	    striped : true,
 	    fitColumns: true,
@@ -217,14 +218,14 @@ function paperInfoAddFun(id) {
         	<input type="hidden" name="sumStr" id="sumStr"/>
             <table>
                 <tr>
-                	<th>阶段</th>
-            		<td style="padding-right:100px;">
-            			<select id="stageExamPaperShow" class="easyui-combobox" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;" disabled="disabled">
-						    <option value="S1">S1</option>
-						    <option value="S2">S2</option>
-						    <option value="S3">S3</option>
-						</select>
-            		</td>
+<%--                	<th>阶段</th>--%>
+<%--            		<td style="padding-right:100px;">--%>
+<%--            			<select id="stageExamPaperShow" class="easyui-combobox" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;" disabled="disabled">--%>
+<%--						    <option value="S1">S1</option>--%>
+<%--						    <option value="S2">S2</option>--%>
+<%--						    <option value="S3">S3</option>--%>
+<%--						</select>--%>
+<%--            		</td>--%>
                     <th style="font-size:16px;">试卷名称:</th>
                     <td style="font-size:16px;width:auto;padding-right:100px;">
                     	${examPaper.title}

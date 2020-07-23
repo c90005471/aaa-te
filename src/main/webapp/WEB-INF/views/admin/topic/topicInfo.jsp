@@ -276,14 +276,14 @@ function topicInfoSearchFun() {
         <form id="topicInfoSearchForm">
             <table>
                 <tr>
-                	<th>阶段</th>
-            		<td>
-            			<select id="stageInfo" class="easyui-combobox" data-options="panelHeight:70" style="height:25px;width:100px;">   
-						    <option value="S1">S1</option>   
-						    <option value="S2">S2</option>  
-						    <option value="S3" selected="selected">S3</option>   
-						</select>
-            		</td>
+<%--                	<th>阶段</th>--%>
+<%--            		<td>--%>
+<%--            			<select id="stageInfo" class="easyui-combobox" data-options="panelHeight:70" style="height:25px;width:100px;">--%>
+<%--						    <option value="S1">S1</option>--%>
+<%--						    <option value="S2">S2</option>--%>
+<%--						    <option value="S3" selected="selected">S3</option>--%>
+<%--						</select>--%>
+<%--            		</td>--%>
                      <th>题目:</th>
                     <td>
                     	<input type="hidden" id="topictype" name="topictype"/>

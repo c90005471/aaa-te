@@ -153,14 +153,14 @@ function topicTypesSearchFun() {
         <form id="topicTypesSearchForm">
             <table>
                 <tr>
-                	<th>阶段</th>
-            		<td>
-            			<select id="stage" class="easyui-combobox" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;">   
-						    <option value="S1">S1</option>   
-						    <option value="S2">S2</option>  
-						    <option value="S3" selected="selected">S3</option>   
-						</select>
-            		</td>
+<%--                	<th>阶段</th>--%>
+<%--            		<td>--%>
+<%--            			<select id="stage" class="easyui-combobox" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;">   --%>
+<%--						    <option value="S1">S1</option>   --%>
+<%--						    <option value="S2">S2</option>  --%>
+<%--						    <option value="S3" selected="selected">S3</option>   --%>
+<%--						</select>--%>
+<%--            		</td>--%>
                      <th>名称:</th>
                     <td>
                     	<input type="text" name="typename">

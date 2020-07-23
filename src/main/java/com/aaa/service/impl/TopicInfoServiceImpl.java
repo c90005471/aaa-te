@@ -149,10 +149,10 @@ public class TopicInfoServiceImpl extends ServiceImpl<TopicInfoMapper,TopicInfo>
 	@Override
 	public List<Tree> selectTree(String stage) {
 		Map<String,Object> map = new HashMap<String,Object>();
-		if(StringUtils.isBlank(stage)){
-			stage ="S3";
-		}
-		map.put("stage", stage);
+//		if(StringUtils.isBlank(stage)){
+//			stage ="S3";
+//		}
+//		map.put("stage", stage);
 		map.put("typestate", 1);
 	  List<TopicTypes> typeList = topicTypesMapper.selectByMap(map);//获取所有班级和组织信息
       List<Tree> trees = new ArrayList<Tree>();

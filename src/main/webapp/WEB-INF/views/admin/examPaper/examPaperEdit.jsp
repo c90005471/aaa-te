@@ -41,16 +41,16 @@
     <div data-options="region:'center',border:false" style="overflow: hidden;padding: 3px;" >
         <form id="examPaperEditForm" method="post">
             <table class="grid">
-            	<tr>
-            		<td>阶段</td>
-                   <td>
-                   	<select  id="stageExamPaper" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;">   
-						    <option value="S1">S1</option>   
-						    <option value="S2">S2</option>  
-						    <option value="S3" selected="selected">S3</option>   
-						</select>
-                   </td>
-                 </tr>
+<%--            	<tr>--%>
+<%--            		<td>阶段</td>--%>
+<%--                   <td>--%>
+<%--                   	<select  id="stageExamPaper" name="stage" data-options="panelHeight:70" style="height:25px;width:100px;">   --%>
+<%--						    <option value="S1">S1</option>   --%>
+<%--						    <option value="S2">S2</option>  --%>
+<%--						    <option value="S3" selected="selected">S3</option>   --%>
+<%--						</select>--%>
+<%--                   </td>--%>
+<%--                 </tr>--%>
                 <tr>
                     <td>试卷名称</td>
                     <td>

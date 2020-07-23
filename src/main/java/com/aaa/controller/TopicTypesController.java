@@ -46,11 +46,11 @@ public class TopicTypesController extends BaseController {
     public Object dataGrid(Integer page, Integer rows, String sort, String order,TopicTypes topicTypes) {
         PageInfo pageInfo = new PageInfo(page, rows, sort, order);
         Map<String, Object> condition = new HashMap<String, Object>();
-        if(StringUtils.isNotBlank(topicTypes.getStage())){
-        	condition.put("stage", topicTypes.getStage());
-        }else{
-        	condition.put("stage", "S3");
-        }
+//        if(StringUtils.isNotBlank(topicTypes.getStage())){
+//        	condition.put("stage", topicTypes.getStage());
+//        }else{
+//        	condition.put("stage", "S3");
+//        }
         if (StringUtils.isNotBlank(topicTypes.getTypename())) {
             condition.put("typename", topicTypes.getTypename());
         }

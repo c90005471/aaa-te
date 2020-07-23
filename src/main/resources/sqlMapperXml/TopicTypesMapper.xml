@@ -22,7 +22,12 @@
     </select>
     <select id="selectTypeAndSum" parameterType="String" resultType="Map">
         SELECT t.id,t.typename,(select count(m.id) from topic_info m where m.topicstate=1 and t.id = m.topictype) sum from topic_types t
-        where t.typestate = 1 and t.stage=#{stage}
+        <where>
+            t.typestate = 1
+            <if test="stage!=null and stage!=''">
+                and t.stage=#{stage}
+            </if>
+        </where>
         order BY t.id
     </select>
 </mapper>

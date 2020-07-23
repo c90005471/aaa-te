@@ -45,11 +45,11 @@ public class TopicTypesServiceImpl extends ServiceImpl<TopicTypesMapper,TopicTyp
 	@Override
 	public List<Map<String, Object>> selectTypeAndSum(String stage) {
 		//获取科目状态为1 试题状态为1的信息
-		if(StringUtils.isBlank(stage)){
-			stage = "S3";
-		}
+//		if(StringUtils.isBlank(stage)){
+//			stage = "S3";
+//		}
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("stage", stage);
+//		map.put("stage", stage);
 		List<Map<String, Object>> list = topicTypesMapper.selectTypeAndSum(stage);
 		return list;
 	}

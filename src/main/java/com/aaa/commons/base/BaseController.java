@@ -50,6 +50,7 @@ public abstract class BaseController {
         binder.registerCustomEditor(String.class, new StringEscapeEditor());
     }
 
+
     /**
      * 获取当前登录用户对象
      * @return {ShiroUser}

@@ -17,6 +17,11 @@ public class TopicInfoExcelVo {
 	 */
 	private String correct;
 	/**
+	 * 试题难度
+	 */
+	private String difficulty;
+
+	/**
 	 * 试题类型
 	 */
 	private String type;
@@ -85,6 +90,12 @@ public class TopicInfoExcelVo {
 	public void setTopictype(Long topictype) {
 		this.topictype = topictype;
 	}
-	
-	
+
+	public String getDifficulty() {
+		return difficulty;
+	}
+
+	public void setDifficulty(String difficulty) {
+		this.difficulty = difficulty;
+	}
 }

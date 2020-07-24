@@ -181,6 +181,15 @@ public class TopicInfoServiceImpl extends ServiceImpl<TopicInfoMapper,TopicInfo>
 				info.setTopictype(topictype);
 				info.setCorrect(vo.getCorrect());
 				info.setType(vo.getType().equals("单选题")?0:1);
+				if (vo.getDifficulty().equals("简单")){
+					info.setDifficulty("0");
+				}
+				if (vo.getDifficulty().equals("中等")){
+					info.setDifficulty("1");
+				}
+				if (vo.getDifficulty().equals("困难")){
+					info.setDifficulty("2");
+				}
 				info.setCreator(userId);
 				info.setCreatetime(new Date());
 				info.setScore(2);

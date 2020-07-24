@@ -64,6 +64,22 @@
             
         },{
             width : '80',
+            title : '试题难度',
+            field : 'difficulty',
+            formatter : function(value, row, index) {
+                switch (value) {
+                    case "0":
+                        console.log(value);
+                        return '简单';
+                    case "1":
+                        return '中等';
+                    case "2":
+                        return '困难';
+                }
+            }
+
+        },{
+            width : '80',
             title : '创建人',
             field : 'teachername',
             sortable : true
@@ -289,6 +305,15 @@ function topicInfoSearchFun() {
                     	<input type="hidden" id="topictype" name="topictype"/>
                     	<input type="text" name="topicname">
                     </td>
+                    	<th>难度</th>
+                		<td>
+                			<select id="difficulty" name="difficulty" class="easyui-combobox" data-options="panelHeight:70" style="height:25px;width:100px;">
+    						    <option value="" selected="selected">--请选择--</option>
+    						    <option value="0">简单</option>
+    						    <option value="1">中等</option>
+    						    <option value="2">困难</option>
+    						</select>
+                		</td>
                     <td> 
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-magnifying-glass',plain:true" onclick="topicInfoSearchFun();">查询</a>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fi-x-circle',plain:true" onclick="topicInfoCleanFun();">清空</a>

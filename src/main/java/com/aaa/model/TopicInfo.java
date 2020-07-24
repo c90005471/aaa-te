@@ -54,7 +54,11 @@ public class TopicInfo extends Model<TopicInfo> {
 	  * 状态
 	  */
 	 private Integer topicstate;
-	 
+	/**
+	 * 难度
+	 */
+	private String difficulty;
+
 	public Long getId() {
 		return id;
 	}
@@ -132,6 +136,14 @@ public class TopicInfo extends Model<TopicInfo> {
 	}
 	public void setScore(Integer score) {
 		this.score = score;
+	}
+
+	public String getDifficulty() {
+		return difficulty;
+	}
+
+	public void setDifficulty(String difficulty) {
+		this.difficulty = difficulty;
 	}
 
 	@Override

@@ -75,6 +75,9 @@ public class TopicInfoController extends BaseController{
         if (StringUtils.isNotBlank(topicInfo.getTopicname())) {
             condition.put("topicname", topicInfo.getTopicname());
         }
+        if (StringUtils.isNotBlank(topicInfo.getDifficulty())) {
+            condition.put("difficulty", topicInfo.getDifficulty());
+        }
         if (topicInfo.getTopictype()!=null) {
             condition.put("topictype", topicInfo.getTopictype());
         }
@@ -230,6 +233,7 @@ public class TopicInfoController extends BaseController{
     	LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
     	InputStream in = mf.getInputStream();
     	map.put("topicname", "题目内容");
+    	map.put("difficulty", "试题难度");
     	map.put("type", "试题类型");
     	map.put("correct", "题目答案");
     	map.put("optionA", "选项A");

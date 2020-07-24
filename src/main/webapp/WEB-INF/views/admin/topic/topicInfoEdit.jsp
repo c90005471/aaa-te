@@ -47,6 +47,16 @@
                     <td><textarea name="topicname" placeholder="请输入题目内容" style="width:400px;height:70px;resize:none;" class="easyui-validatebox span2" data-options="required:true" >${topicInfo.topicname}</textarea></td>
                 </tr>
                 <tr>
+                    <td>试题难度</td>
+                    <td>
+                        <select name="difficulty" style="width:100px;height:30px;">
+                            <option value="0" <c:if test="${topicInfo.difficulty=='0'}">selected</c:if> >简单</option>
+                            <option value="1" <c:if test="${topicInfo.difficulty=='1'}">selected</c:if> >中等</option>
+                            <option value="2" <c:if test="${topicInfo.difficulty=='2'}">selected</c:if> >困难</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td>试题类型</td>
                     <td>
                     	<select id="type" name="type" style="width:100px;height:30px;">

@@ -7,7 +7,7 @@
 	 </insert>
     <select id="selectTopicInfoPage" resultType="Map">
         SELECT 
-        t.id,t.topicname,s.typename,t.correct,t.type,t.decipher,u.name teachername from topic_info t
+        t.id,t.topicname,s.typename,t.correct,t.type,t.difficulty,t.decipher,u.name teachername from topic_info t
         left join user u on u.id = t.creator 
         left join topic_types s on s.id = topictype 
         <where> 1=1
@@ -16,6 +16,9 @@
             </if>
             <if test=" topictype != null">
                 and t.topictype =#{topictype}
+            </if>
+            <if test=" difficulty != null and difficulty != ''">
+                and t.difficulty =#{difficulty}
             </if>
             <if test=" topicstate != null">
                 and t.topicstate =#{topicstate}

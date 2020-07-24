@@ -5,10 +5,10 @@
 	<insert id="insertExamPaper"  useGeneratedKeys="true" keyProperty="id" parameterType="com.aaa.model.ExamPaper">
 	  	insert into exam_paper (title,starttime,needtime,number,stage,type,state,creator,createtime) values (#{title},#{starttime},#{needtime},#{number},#{stage},#{type},#{state},#{creator},#{createtime})
 	 </insert>
-    <select id="selectExamPaperPage" resultType="Map">
+    <select id="selectExamPaperPage" resultType="Map" parameterType="Map">
         SELECT 
         t.id,t.title,t.starttime,t.needtime,t.number,t.stage,t.type,t.state,round(r.zscore/r.sum,2) avgscore,round(r1.passscore/r.sum,2) passrate,
-        tuc.user_id,u2.name
+        tuc.user_id,u2.name,concat(o2.name,'--',o.name,'--',c.classname) classname
         from exam_paper t
         left join tbl_class c on t.classid=c.id
 
@@ -16,6 +16,7 @@
         left join `user` u2 on u2.id=tuc.user_id
 
         left join organization o on c.orgid = o.id
+        left join organization o2 on  o.pid=o2.id
         <!-- 获取试卷下的平均分和及格率 -->
         left join (select paperid,sum(score) zscore,count(id) sum from exam_record where state=1 group by paperid) r on r.paperid = t.id
 		left join (select paperid, sum(score) passscore from exam_record where score>=60 and state=1 group by paperid) r1 on r1.paperid = t.id
@@ -25,6 +26,45 @@
             </if>
         	<if test=" classid != null ">
         		and t.classid = #{classid}  
+        	</if>
+        	<if test=" orgids != null ">
+                 and o.id in (#{orgids})
+            </if>
+            <if test=" title != null and title != '' ">
+                and t.title like concat(concat('%',#{title}),'%')
+            </if>
+            <if test=" type != null ">
+                 and t.type = #{type}
+            </if>
+            <if test=" creator != null and creator != 0 ">
+              <!--and t.creator =#{creator}-->
+                and tuc.user_id =#{creator}
+            </if>
+        </where>
+        order BY t.id desc
+    </select>
+
+    <select id="selectExamPaperPage1" resultType="Map" parameterType="Map">
+        SELECT
+        t.id,t.title,t.starttime,t.needtime,t.number,t.stage,t.type,t.state,round(r.zscore/r.sum,2) avgscore,round(r1.passscore/r.sum,2) passrate,
+        tuc.user_id,u2.name,concat(o2.name,'--',o.name,'--',c.classname) classname
+        from exam_paper t
+        left join tbl_class c on t.classid=c.id
+
+        left join tbl_user_class tuc on tuc.class_id=t.classid
+        left join `user` u2 on u2.id=tuc.user_id
+
+        left join organization o on c.orgid = o.id
+        left join organization o2 on  o.pid=o2.id
+        <!-- 获取试卷下的平均分和及格率 -->
+        left join (select paperid,sum(score) zscore,count(id) sum from exam_record where state=1 group by paperid) r on r.paperid = t.id
+		left join (select paperid, sum(score) passscore from exam_record where score>=60 and state=1 group by paperid) r1 on r1.paperid = t.id
+        <where> <!-- c.graduate = 0 -->
+            <if test=" graduate != null and graduate!=''">
+                and c.graduate = #{graduate}
+            </if>
+        	<if test=" classid != null ">
+        		and t.classid = #{classid}
         	</if>
         	<if test=" orgids != null ">
                  and o.id in (#{orgids})

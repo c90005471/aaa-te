@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.aaa.model.vo.UserVo;
+import com.aaa.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +29,10 @@ public class ExamPaperController extends BaseController {
 	private IExamPaperService examPaperService; 
 	@Autowired
     private IOrganizationService organizationService;
+
+	@Autowired
+    private IUserService userService;
+
 	/**
 	 * 试卷列表页面
 	 * @return
@@ -39,12 +45,54 @@ public class ExamPaperController extends BaseController {
      * 试卷列表页面回调方法
      * @return
      */
+    @PostMapping("/dataGridManager")
+    @ResponseBody
+    public Object dataGridManager(Integer page, Integer rows, String sort, String order,ExamPaper examPaper,Long orgid,String flag,String graduate) {
+        PageInfo pageInfo = new PageInfo(page, rows, sort, order);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        if(orgid!=null){//校区或专业的id 
+    		String idstr = findOrgList(orgid+"","");//获取校区或专业下所有的子类
+    		if(StringUtils.isNotBlank(idstr)&&idstr.length()>1){
+    			idstr = idstr.substring(0,idstr.length()-1);
+    			condition.put("orgids", idstr);
+    		}
+    	}
+        if(examPaper!=null&& examPaper.getClassid()!=null){
+            condition.put("classid", examPaper.getClassid());
+        }
+        if (StringUtils.isNotBlank(examPaper.getTitle())) {
+            condition.put("title", examPaper.getTitle());
+        }
+        if(examPaper.getType()!=null){
+        	condition.put("type", examPaper.getType());
+        }
+        Long userId = getUserId();
+
+        UserVo userVo = userService.selectVoById(userId);
+        //显示当前创建人创建的试卷
+//        condition.put("creator", userId);
+        condition.put("graduate", graduate);
+        condition.put("orgids", userVo.getOrganizationId());
+
+        if(StringUtils.isNotBlank(flag)){//如果显示考试记录 并且 登陆者为admin时
+        	if(userId==1l){
+        		condition.put("creator", null);
+        	}
+        }
+        pageInfo.setCondition(condition);
+        examPaperService.selectDataGrid(pageInfo);
+        return pageInfo;
+    }
+/**
+     * 试卷列表页面回调方法
+     * @return
+     */
     @PostMapping("/dataGrid")
     @ResponseBody
     public Object dataGrid(Integer page, Integer rows, String sort, String order,ExamPaper examPaper,Long orgid,String flag,String graduate) {
         PageInfo pageInfo = new PageInfo(page, rows, sort, order);
         Map<String, Object> condition = new HashMap<String, Object>();
-        if(orgid!=null){//校区或专业的id 
+        if(orgid!=null){//校区或专业的id
     		String idstr = findOrgList(orgid+"","");//获取校区或专业下所有的子类
     		if(StringUtils.isNotBlank(idstr)&&idstr.length()>1){
     			idstr = idstr.substring(0,idstr.length()-1);

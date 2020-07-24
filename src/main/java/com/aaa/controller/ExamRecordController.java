@@ -46,6 +46,14 @@ public class ExamRecordController extends BaseController {
 		return "admin/examRecord/examRecord";
 	}
 	/**
+	 * 考试记录页面
+	 * @return
+	 */
+	@RequestMapping("/managerOrganization")
+	public String managerOrganization(){
+		return "admin/examRecordManager/examRecord";
+	}
+	/**
      * 考试记录页面回调方法
      * @return
      */

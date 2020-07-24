@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface IExamPaperService extends  IService<ExamPaper>{
 	void selectDataGrid(PageInfo pageInfo);
+	void selectDataGrid1(PageInfo pageInfo);
 
 	void addExamPaperAndTopicInfo(Long id, String sumStr,String xin);
 

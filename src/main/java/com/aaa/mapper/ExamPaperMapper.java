@@ -18,6 +18,7 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
 	List<Map<String, Object>> selectExamPaperPage(Page<Map<String, Object>> page, Map<String, Object> condition);
+	List<Map<String, Object>> selectExamPaperPage1(Page<Map<String, Object>> page, Map<String, Object> condition);
 
 	List<ExamPaper> findExamPaperByMap(Map<String, Object> map);
 

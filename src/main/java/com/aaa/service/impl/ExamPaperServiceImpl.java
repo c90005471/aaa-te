@@ -74,6 +74,16 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
         pageInfo.setRows(list);
         pageInfo.setTotal(page.getTotal());
 	}
+	@Override
+	public void selectDataGrid1(PageInfo pageInfo) {
+		Page<Map<String, Object>> page = new Page<Map<String, Object>>(pageInfo.getNowpage(), pageInfo.getSize());
+        page.setOrderByField(pageInfo.getSort());
+        page.setAsc(pageInfo.getOrder().equalsIgnoreCase("asc"));
+        List<Map<String, Object>> list = examPaperMapper.selectExamPaperPage1(page, pageInfo.getCondition());
+        //获取试题类型
+        pageInfo.setRows(list);
+        pageInfo.setTotal(page.getTotal());
+	}
 	/**
 	 * 保存试卷和题目关系信息
 	 */

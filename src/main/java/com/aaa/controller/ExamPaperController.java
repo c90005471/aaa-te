@@ -41,7 +41,7 @@ public class ExamPaperController extends BaseController {
      */
     @PostMapping("/dataGrid")
     @ResponseBody
-    public Object dataGrid(Integer page, Integer rows, String sort, String order,ExamPaper examPaper,Long orgid,String flag) {
+    public Object dataGrid(Integer page, Integer rows, String sort, String order,ExamPaper examPaper,Long orgid,String flag,String graduate) {
         PageInfo pageInfo = new PageInfo(page, rows, sort, order);
         Map<String, Object> condition = new HashMap<String, Object>();
         if(orgid!=null){//校区或专业的id 
@@ -63,6 +63,7 @@ public class ExamPaperController extends BaseController {
         Long userId = getUserId();
         //显示当前创建人创建的试卷
         condition.put("creator", userId);
+        condition.put("graduate", graduate);
         if(StringUtils.isNotBlank(flag)){//如果显示考试记录 并且 登陆者为admin时
         	if(userId==1l){
         		condition.put("creator", null);

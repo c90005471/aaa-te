@@ -20,7 +20,7 @@
         left join (select paperid,sum(score) zscore,count(id) sum from exam_record where state=1 group by paperid) r on r.paperid = t.id
 		left join (select paperid, sum(score) passscore from exam_record where score>=60 and state=1 group by paperid) r1 on r1.paperid = t.id
         <where> <!-- c.graduate = 0 -->
-            <if test=" graduate != null ">
+            <if test=" graduate != null and graduate!=''">
                 and c.graduate = #{graduate}
             </if>
         	<if test=" classid != null ">

@@ -62,6 +62,9 @@
             rownumbers : true,
             pagination : true,
             singleSelect : true,
+            queryParams:{
+                graduate:$("#classStatusId").val()
+            },
             idField : 'id',
             sortName : 'id',
             sortOrder : 'asc',
@@ -207,8 +210,8 @@ function examRecordSearchFun() {
                 <tr>
                 	<th>选择班级组织:</th>
                 	<td>
-                		<select id="classStatusId" style="width:60px;margin-right: 20px;">
-                			<option value="">在校</option>
+                		<select id="classStatusId" style="width:60px;margin-right: 20px;" name="graduate">
+                			<option value="0">在校</option>
                 			<option value="1">毕业</option>
                 		</select>
                 	</td>

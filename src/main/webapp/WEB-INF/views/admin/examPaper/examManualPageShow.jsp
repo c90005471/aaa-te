@@ -90,27 +90,30 @@ $(function(){
         }
     });
 	
-	//选择阶段
-	$("#stageExamPaperShow").combobox({
-		onLoadSuccess:function(){
-			$("#stageExamPaperShow").combobox("select","${examPaper.stage}");
-		}
-	});
+	<%--//选择阶段--%>
+	<%--$("#stageExamPaperShow").combobox({--%>
+	<%--	onLoadSuccess:function(){--%>
+	<%--		$("#stageExamPaperShow").combobox("select","${examPaper.stage}");--%>
+	<%--	}--%>
+	<%--});--%>
 });
 //格式化html代码显示到页面上
 function escape4html(str){
 	var sb = "";
-    var strs = str.split("");
-	for(var i=0;i<strs.length;i++){ 
-        if(strs[i] =='"') 
-        	sb+="&quot;";
-        else if(strs[i] =='<') 
-        	sb+="&lt;";
-        else if(strs[i] =='>') 
-        	sb+="&gt;";
-        else 
-        	sb+=strs[i];
+	if (str!=null&&str!=""){
+        var strs = str.split("");
+        for(var i=0;i<strs.length;i++){
+            if(strs[i] =='"')
+                sb+="&quot;";
+            else if(strs[i] =='<')
+                sb+="&lt;";
+            else if(strs[i] =='>')
+                sb+="&gt;";
+            else
+                sb+=strs[i];
+        }
     }
+
 	//alert(sb);
     return sb; 
 }

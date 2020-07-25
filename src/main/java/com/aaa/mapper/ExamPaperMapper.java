@@ -19,6 +19,7 @@ import org.apache.ibatis.annotations.Select;
 public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
 	List<Map<String, Object>> selectExamPaperPage(Page<Map<String, Object>> page, Map<String, Object> condition);
 	List<Map<String, Object>> selectExamPaperPage1(Page<Map<String, Object>> page, Map<String, Object> condition);
+	List<Map<String, Object>> findAllPaper();
 
 	List<ExamPaper> findExamPaperByMap(Map<String, Object> map);
 
@@ -28,5 +29,6 @@ public interface ExamPaperMapper extends BaseMapper<ExamPaper> {
 	 * 增加 试卷和 班级之间的中间表
 	 */
 	void insertPaperClass(Map<String, Object> map);
+	void duplicateExamPaper(Map<String, Object> map);
 
 }

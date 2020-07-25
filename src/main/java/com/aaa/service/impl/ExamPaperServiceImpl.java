@@ -102,11 +102,20 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		//保存试卷和试题信息
 		savePaperInfo(id, sumStr,null);
 	}
+
+	@Override
+	public void duplicateExamPaper(Long pid, Long eid) {
+		Map<String,Object> map=new HashMap<>();
+		map.put("pid",pid);
+		map.put("eid",eid);
+		examPaperMapper.duplicateExamPaper(map);
+	}
+
 	/**
 	 * 保存试卷和试题信息
 	 * @param id
 	 * @param sumStr
-	 * @param infoIdSet 原来试卷中试题
+	 * @param infoIdList 原来试卷中试题
 	 */
 	private void savePaperInfo(Long id,String sumStr,List<Long> infoIdList){
 		//抽取试题
@@ -219,6 +228,13 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		}
 		return dataList;
 	}
+
+	@Override
+	public List<Map<String, Object>> findAllPaper() {
+		List<Map<String, Object>> result=examPaperMapper.findAllPaper();
+		return result;
+	}
+
 	/**
 	 * 查询试卷是否有该学生
 	 */

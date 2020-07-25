@@ -80,7 +80,7 @@ public class ExamPaperController extends BaseController {
         	}
         }
         pageInfo.setCondition(condition);
-        examPaperService.selectDataGrid(pageInfo);
+        examPaperService.selectDataGrid1(pageInfo);
         return pageInfo;
     }
 /**
@@ -215,6 +215,13 @@ public class ExamPaperController extends BaseController {
     	examPaperService.addExamPaperAndTopicInfo(id,sumStr,xin);
     	return renderSuccess("操作成功");
     }
+
+    @PostMapping("/duplicatePaperInfo")
+    @ResponseBody
+    public Object duplicatePaperInfo(Long pid,Long eid){
+    	examPaperService.duplicateExamPaper(pid,eid);
+    	return renderSuccess("操作成功");
+    }
     
     /**
      * 智能组卷回调的datagrid方法
@@ -230,6 +237,7 @@ public class ExamPaperController extends BaseController {
         examPaperService.selectPaperInfoPage(pageInfo);
         return pageInfo;
     }
+
     /**
      * 智能组卷删除试题
      * @param id
@@ -250,6 +258,16 @@ public class ExamPaperController extends BaseController {
         ExamPaper examPaper = examPaperService.selectById(id);
         model.addAttribute("examPaper",examPaper);
         return "admin/examPaper/examManualPageShow";
+    }
+
+    /**
+     * 跳转试卷复用页面
+     */
+    @GetMapping("/duplicatePage")
+    public String duplicatePage(Model model, Long id) {
+        ExamPaper examPaper = examPaperService.selectById(id);
+        model.addAttribute("examPaper",examPaper);
+        return "admin/examPaper/examDuplicatePageShow";
     }
 
     /**
@@ -323,4 +341,16 @@ public class ExamPaperController extends BaseController {
         }
         return renderSuccess("修改成功！");
     }
+
+    /**
+     * 科目类型管理列表(未分页)
+     * @return
+     */
+    @PostMapping("/data")
+    @ResponseBody
+    public Object data(String stage) {
+        List<Map<String, Object>> list = examPaperService.findAllPaper();
+        return list;
+    }
+
 }

@@ -106,8 +106,11 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 	@Override
 	public void duplicateExamPaper(Long pid, Long eid) {
 		Map<String,Object> map=new HashMap<>();
+		Map<String,Object> map1=new HashMap<>();
 		map.put("pid",pid);
 		map.put("eid",eid);
+		map1.put("paperid", eid);
+		paperInfoMapper.deleteByMap(map1);
 		examPaperMapper.duplicateExamPaper(map);
 	}
 

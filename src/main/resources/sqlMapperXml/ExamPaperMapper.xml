@@ -8,7 +8,7 @@
     <select id="selectExamPaperPage" resultType="Map" parameterType="Map">
         SELECT 
         t.id,t.title,t.starttime,t.needtime,t.number,t.stage,t.type,t.state,round(r.zscore/r.sum,2) avgscore,round(r1.passscore/r.sum,2) passrate,
-        tuc.user_id,u2.name,concat(o2.name,'--',o.name,'--',c.classname) classname
+        group_concat(u2.name)name,concat(o2.name,'--',o.name,'--',c.classname) classname
         from exam_paper t
         left join tbl_class c on t.classid=c.id
 
@@ -41,6 +41,7 @@
                 and tuc.user_id =#{creator}
             </if>
         </where>
+        group by t.id
         order BY t.id desc
     </select>
 
@@ -75,10 +76,10 @@
             <if test=" type != null ">
                  and t.type = #{type}
             </if>
-            <if test=" creator != null and creator != 0 ">
-              <!--and t.creator =#{creator}-->
-                and tuc.user_id =#{creator}
-            </if>
+<!--            <if test=" creator != null and creator != 0 ">-->
+<!--              &lt;!&ndash;and t.creator =#{creator}&ndash;&gt;-->
+<!--                and tuc.user_id =#{creator}-->
+<!--            </if>-->
         </where>
         order BY t.id desc
     </select>
@@ -86,8 +87,6 @@
     <select id="selectExamPaperByMap" parameterType="map" resultType="com.aaa.model.ExamPaper">
     	select e.* from exam_paper e 
 			where
--- 			e.stage =#{stage}
--- 			and
 			 e.type = #{type}
 			and e.state = #{state}
 			and NOW() between e.starttime and date_add(e.starttime, interval e.needtime minute)

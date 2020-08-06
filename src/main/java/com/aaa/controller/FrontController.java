@@ -387,7 +387,6 @@ public class FrontController extends BaseController {
     /**
      * 心理测试前台显示试题题目
      *
-     * @param chapterid
      * @param session
      * @return
      */
@@ -838,8 +837,10 @@ public class FrontController extends BaseController {
         boolean flag = (boolean) map.get("flag");
         if (flag) {
             Long recordId = (Long) map.get("id");
+            Object paperinfoid = map.get("paperinfoid");
             model.addAttribute("paperId", examPaperId);//试卷id
             model.addAttribute("id", recordId);//考试记录id
+            model.addAttribute("paperinfoid", paperinfoid);
             return "front/exam/examPaper";
         } else {
             return "front/exam/examLogin";
@@ -852,8 +853,8 @@ public class FrontController extends BaseController {
      */
     @RequestMapping("/findExamQuestion")
     @ResponseBody
-    public List<Question> findExamQuestion(Model model, HttpSession session, Long paperId) {
-        Map<String, Object> map = examPaperService.selectQuestionMap(paperId);
+    public List<Question> findExamQuestion(Model model, HttpSession session, Long paperId,Long paperinfoid) {
+        Map<String, Object> map = examPaperService.selectQuestionMap(paperId,paperinfoid);
         session.setAttribute("examQuestions", map.get("examQuestions"));
         List<Question> questionList = (List<Question>) map.get("questionList");
         return questionList;
@@ -968,10 +969,12 @@ public class FrontController extends BaseController {
         boolean flag = (boolean) map.get("flag");
         if (flag) {
             Long recordId = (Long) map.get("id");
+            Long paperinfoid = (Long) map.get("paperinfoid");
             //试卷id
             model.addAttribute("paperId", examPaperId);
             //考试记录id
             model.addAttribute("id", recordId);
+            model.addAttribute("paperinfoid", paperinfoid);
             return "front/exam/examPaper";
         } else {
             return "front/exam/newExamLogin";

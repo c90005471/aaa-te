@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aaa.mapper.PaperBankMapper">
+	
+
+    <select id="selectPaperBankPage" resultType="Map" parameterType="Map">
+        select id,paperid,infoid,papername
+        from paper_info pi
+        <where> <!-- c.graduate = 0 -->
+            <if test=" papername != null and papername!=''">
+                and pi.papername like concat('%',#{papername},'%')
+            </if>
+        </where>
+        order by pi.id desc
+    </select>
+
+    <!-- 根据科目id  随机抽取sum道试题 -->
+    <select id="selectInfoByTypeIdAndSum" parameterType="map" resultType="com.aaa.model.TopicInfo">
+    	SELECT t.id,t.topictype FROM topic_info t where topicstate =1 and t.topictype=#{topictype} ORDER BY  RAND() LIMIT #{sum}
+    </select>
+
+    <select id="getPaperid" resultType="Integer">
+        select coalesce(max(pi2.paperid),0) paperid from paper_info pi2
+    </select>
+
+    <select id="selectPaperGroup" parameterType="Map" resultType="Map">
+        select pi2.id,pi2.papername,
+        (select count(*) from paper_info pi3 where pi3.parentid=pi2.id)counts,
+        (select name from user u where u.id=pi2.createby) teachername
+        from paper_info pi2 where pi2.isparent=1
+        <if test="paperid!=null and paperid!=''">
+            and pi2.paperid=#{paperid}
+        </if>
+        <if test="papername!=null and papername!=''">
+            and pi2.papername like concat('%',#{papername},'%')
+        </if>
+        <if test="id!=null and id!=''">
+            and pi2.id=#{id}
+        </if>
+    </select>
+
+    <select id="selectPaperBank" parameterType="Map" resultType="Map">
+        select pi3.papername,pi3.paperid from paper_info pi3 where pi3.isparent=0 and pi3.paperid=#{paperid}
+    </select>
+    <update id="updatePapername" parameterType="Map">
+        update paper_info set papername=#{papername} where id=#{id}
+    </update>
+
+    <delete id="deletePapers" parameterType="Map">
+        delete from paper_info where id=#{id} or paperid=#{paperid}
+    </delete>
+</mapper>

@@ -42,6 +42,16 @@ public class ExamPaper extends Model<ExamPaper> {
 	private Long creator;
 	private Date createtime;
 	private Long classid;
+	private Long paperinfoid;
+
+	public Long getPaperinfoid() {
+		return paperinfoid;
+	}
+
+	public void setPaperinfoid(Long paperinfoid) {
+		this.paperinfoid = paperinfoid;
+	}
+
 	public Long getId() {
 		return id;
 	}

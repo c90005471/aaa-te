@@ -56,7 +56,7 @@
             }
         });
     	examRecordPaperDataGrid = $('#examRecordPaperDataGrid').datagrid({
-            url : '${path}/examPaper/dataGrid?flag=1',//注:flag为系统管理员的id
+            url : '${path}/examPaper/dataGrid1?flag=1',//注:flag为系统管理员的id
             fit : true,
             striped : true,
             rownumbers : true,

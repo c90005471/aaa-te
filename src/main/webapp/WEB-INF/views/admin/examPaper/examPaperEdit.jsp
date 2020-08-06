@@ -2,6 +2,13 @@
 <%@ include file="/commons/global.jsp" %>
 <script type="text/javascript">
     $(function() {
+		$("#papeinfoid1").combobox({
+			url:'${path}/paperBank/dataGridBank',
+			valueField:'id',
+			textField:'papername',
+			panelHeight:'auto',
+			editable:false
+		});
     	/* 表单提交 */
        $('#examPaperEditForm').form({
             url : '${path}/examPaper/edit',
@@ -25,7 +32,8 @@
     	$("#stageExamPaper").val("${examPaper.stage}");
     	$("#type").val("${examPaper.type}");
     	$("#state").val("${examPaper.state}");
-    	
+    	$("#papeinfoid1").combobox('setValue','${examPaper.paperinfoid}');
+		console.log(${examPaper.paperinfoid});
     	
     	$('#dd').datetimebox().datetimebox('calendar').calendar({
 			validator: function(date){
@@ -73,8 +81,8 @@
             	<tr>
                 	<td>试题数量</td>
                 	<td>
-                	<input name="number" value="${examPaper.number}" style="height:30px;width:100px;" type="text" placeholder="请输入数量" class="easyui-numberspinner" data-options="required:true,min:1,max:144,editable:true" >
-                	</td>
+						<input name="paperinfoid" style="height:30px;width:100px;" id="papeinfoid1">
+					</td>
             	</tr>
             	<tr>
             		<td>试卷类型</td>

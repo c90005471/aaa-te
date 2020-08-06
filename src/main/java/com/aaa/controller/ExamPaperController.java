@@ -110,7 +110,7 @@ public class ExamPaperController extends BaseController {
         }
         Long userId = getUserId();
         //显示当前创建人创建的试卷
-        condition.put("creator", userId);
+//        condition.put("creator", userId);
         condition.put("graduate", graduate);
         if(StringUtils.isNotBlank(flag)){//如果显示考试记录 并且 登陆者为admin时
         	if(userId==1l){
@@ -121,6 +121,46 @@ public class ExamPaperController extends BaseController {
         examPaperService.selectDataGrid(pageInfo);
         return pageInfo;
     }
+
+    /**
+     * 试卷列表页面回调方法
+     * @return
+     */
+    @PostMapping("/dataGrid1")
+    @ResponseBody
+    public Object dataGrid1(Integer page, Integer rows, String sort, String order,ExamPaper examPaper,Long orgid,String flag,String graduate) {
+        PageInfo pageInfo = new PageInfo(page, rows, sort, order);
+        Map<String, Object> condition = new HashMap<String, Object>();
+        if(orgid!=null){//校区或专业的id
+            String idstr = findOrgList(orgid+"","");//获取校区或专业下所有的子类
+            if(StringUtils.isNotBlank(idstr)&&idstr.length()>1){
+                idstr = idstr.substring(0,idstr.length()-1);
+                condition.put("orgids", idstr);
+            }
+        }
+        if(examPaper!=null&& examPaper.getClassid()!=null){
+            condition.put("classid", examPaper.getClassid());
+        }
+        if (StringUtils.isNotBlank(examPaper.getTitle())) {
+            condition.put("title", examPaper.getTitle());
+        }
+        if(examPaper.getType()!=null){
+            condition.put("type", examPaper.getType());
+        }
+        Long userId = getUserId();
+        //显示当前创建人创建的试卷
+        condition.put("creator", userId);
+        condition.put("graduate", graduate);
+        if(StringUtils.isNotBlank(flag)){//如果显示考试记录 并且 登陆者为admin时
+            if(userId==1l){
+                condition.put("creator", null);
+            }
+        }
+        pageInfo.setCondition(condition);
+        examPaperService.selectDataGrid(pageInfo);
+        return pageInfo;
+    }
+
     /**
      * 递归调用获取该校区或专业下的所有专业
      * @param pid 父id 0    
@@ -198,23 +238,11 @@ public class ExamPaperController extends BaseController {
      */
     @GetMapping("/showPage")
     public String showPage(Model model, Long id) {
-    	ExamPaper examPaper = examPaperService.selectById(id);
-    	model.addAttribute("examPaper",examPaper);
+//    	ExamPaper examPaper = examPaperService.selectById(id);
+//    	model.addAttribute("examPaper",examPaper);
         return "admin/examPaper/examPaperShow";
     }
-    /**
-     * 智能组卷生成方法
-     * @param id 试卷id
-     * @param sumStr 科目id 抽取数量
-     * @param xin 新增或者重新生成
-     * @return
-     */
-    @PostMapping("/make")
-    @ResponseBody
-    public Object make(Long id,String sumStr,String xin){
-    	examPaperService.addExamPaperAndTopicInfo(id,sumStr,xin);
-    	return renderSuccess("操作成功");
-    }
+
 
     @PostMapping("/duplicatePaperInfo")
     @ResponseBody
@@ -255,8 +283,8 @@ public class ExamPaperController extends BaseController {
      */
     @GetMapping("/manualPage")
     public String manualPage(Model model, Long id) {
-        ExamPaper examPaper = examPaperService.selectById(id);
-        model.addAttribute("examPaper",examPaper);
+//        ExamPaper examPaper = examPaperService.selectById(id);
+//        model.addAttribute("examPaper",examPaper);
         return "admin/examPaper/examManualPageShow";
     }
 
@@ -294,6 +322,8 @@ public class ExamPaperController extends BaseController {
     @PostMapping("/addPaperByManual")
     @ResponseBody
     public Object addPaperByManual(Integer paperid,Integer infoid){
+        Long userId = getUserId();
+
         int len =  examPaperService.addPaperByManual(paperid,infoid);
         return len;
     }

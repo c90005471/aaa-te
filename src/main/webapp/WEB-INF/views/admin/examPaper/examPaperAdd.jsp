@@ -2,6 +2,13 @@
 <%@ include file="/commons/global.jsp" %>
 <script type="text/javascript">
     $(function() {
+		$("#papeinfoid").combobox({
+			url:'${path}/paperBank/dataGridBank',
+			valueField:'id',
+			textField:'papername',
+			panelHeight:'auto',
+			editable:false
+		});
     	/* 表单提交 */
        $('#examPaperAddForm').form({
             url : '${path}/examPaper/add?classid='+classidExamPaper,
@@ -65,9 +72,9 @@
                 	</td>
             	</tr>
             	<tr>
-                	<td>试题数量</td>
+                	<td>题库选择</td>
                 	<td>
-                	<input name="number" value="50" style="height:30px;width:100px;" type="text" placeholder="请输入数量" class="easyui-numberspinner" data-options="required:true,min:1,max:144,editable:true" >
+                	<input name="paperinfoid" style="height:30px;width:100px;" id="papeinfoid">
                 	</td>
             	</tr>
             	<tr>

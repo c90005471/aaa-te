@@ -19,7 +19,7 @@ public interface IExamPaperService extends  IService<ExamPaper>{
 	void selectDataGrid(PageInfo pageInfo);
 	void selectDataGrid1(PageInfo pageInfo);
 
-	void addExamPaperAndTopicInfo(Long id, String sumStr,String xin);
+
 	void duplicateExamPaper(Long pid, Long eid);
 
 	void selectPaperInfoPage(PageInfo pageInfo);
@@ -34,7 +34,7 @@ public interface IExamPaperService extends  IService<ExamPaper>{
 
 	Map<String, Object> findExamPaperByMap(Long examPaperId, String stuno,String stuphone);
 
-	Map<String, Object> selectQuestionMap(Long paperId);
+	Map<String, Object> selectQuestionMap(Long paperId,Long paperinfoid);
 
 	boolean checkExamLogin(Long examPaperId, String stuno, String stuphone);
 

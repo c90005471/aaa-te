@@ -47,7 +47,10 @@ html,body {
 	$.ajax({
 				type : "POST",
 				url : '${path}/front/findExamQuestion',
-				data:{paperId:"${paperId}"},
+				data:{
+				    paperId:"${paperId}",
+                    paperinfoid:"${paperinfoid}"
+                },
 				dataType : 'json',
 				async : false,//关闭异步刷新，因为显示所有的题目是第一步
 				success : function(data) {
@@ -111,6 +114,7 @@ html,body {
 		activeQuestion = id;
 		$(".question").find(".question_info1").remove();
 		var question = questions[id];
+		console.log(question);
 		//var hiddenStr = question.questionType==0?"":"<input type='hidden' name='id' value='"+question.questionId+"'/>";
 		$(".question_title1").html(
 				"<strong>第 " + (id + 1) + " 题   </strong>"

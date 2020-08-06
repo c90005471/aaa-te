@@ -72,18 +72,18 @@
             title : '试卷名称',
             field : 'title',
             sortable : true,
-            
+
         },{
             width : '120',
             title : '开始时间',
             field : 'starttime',
             sortable : true,
-            
+
         },{
             width : '60',
             title : '所需时间',
             field : 'needtime'
-            
+
         },{
             width : '60',
             title : '类型',
@@ -97,7 +97,7 @@
                 case 2:
                     return '模拟练习';
                 }
-            	
+
             }
         },{
             width : '80',
@@ -110,7 +110,7 @@
                 case 1:
                     return '已启用';
                 }
-            	
+
             }
         }, {
             field : 'action',
@@ -118,15 +118,6 @@
             width : 300,
             formatter : function(value, row, index) {
                 var str = '';
-                <shiro:hasPermission name="/examPaper/edit">
-                	str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-show" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPaperShowFun(\'{0}\');" >智能组卷</a>', row.id);
-            	</shiro:hasPermission>
-                <shiro:hasPermission name="/examPaper/edit">
-                    str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-Manual" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPapeManualFun(\'{0}\');" >手动组卷</a>', row.id);
-                </shiro:hasPermission>
-                <shiro:hasPermission name="/examPaper/edit">
-                str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-Duplicate" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPapeDuplicateFun(\'{0}\');" >试卷复用</a>', row.id);
-                </shiro:hasPermission>
                 <shiro:hasPermission name="/examPaper/edit">
                     str += $.formatString('<a href="javascript:void(0)" class="examPaper-easyui-linkbutton-edit" data-options="plain:true,iconCls:\'fi-pencil icon-blue\'" onclick="examPaperEditFun(\'{0}\');" >编辑</a>', row.id);
                 </shiro:hasPermission>
@@ -138,66 +129,15 @@
             }
         } ] ],
         onLoadSuccess:function(data){
-        	$('.examPaper-easyui-linkbutton-show').linkbutton({text:'智能组卷'});
-            $('.examPaper-easyui-linkbutton-Manual').linkbutton({text:'手动组卷'});
-            $('.examPaper-easyui-linkbutton-Duplicate').linkbutton({text:'试卷复用'});
             $('.examPaper-easyui-linkbutton-edit').linkbutton({text:'编辑'});
             $('.examPaper-easyui-linkbutton-del').linkbutton({text:'删除'});
         }//,
         //toolbar : '#examPaperToolbar'
     });
 });
-/**
- * 查看详情
- */
-function examPaperShowFun(id){
-	if (id == undefined) {
-        var rows = examPaperDataGrid.datagrid('getSelections');
-        id = rows[0].id;
-    } else {
-    	examPaperDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-    }
-	parent.$.modalDialog({
-        title : '智能组卷',
-        width : 1200,
-        height : 580,
-        href :  '${path}/examPaper/showPage?id=' + id
-    });
-}
-/** 
- * @author ky
- * @date 2020/2/17   
- * 手动组卷
-**/ 
-function examPapeManualFun(id) {
-    if (id == undefined) {
-        var rows = examPaperDataGrid.datagrid('getSelections');
-        id = rows[0].id;
-    } else {
-        examPaperDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-    }
-    parent.$.modalDialog({
-        title : '手动组卷',
-        width : 1200,
-        height : 580,
-        href :  '${path}/examPaper/manualPage?id=' + id
-    });
-}
-    //试卷复用
-    function examPapeDuplicateFun(id) {
-        if (id == undefined) {
-            var rows = examPaperDataGrid.datagrid('getSelections');
-            id = rows[0].id;
-        } else {
-            examPaperDataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-        }
-        parent.$.modalDialog({
-            title : '试卷复用',
-            width : 1200,
-            height : 580,
-            href :  '${path}/examPaper/duplicatePage?id=' + id
-        });
-    }
+
+
+
 
 /**
  * 添加框

@@ -84,24 +84,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
         pageInfo.setRows(list);
         pageInfo.setTotal(page.getTotal());
 	}
-	/**
-	 * 保存试卷和题目关系信息
-	 */
-	/* (non-Javadoc)
-	 * @see com.aaa.service.IExamPaperService#addExamPaperAndTopicInfo(java.lang.Long, java.lang.String)
-	 */
-	@Override
-	public void addExamPaperAndTopicInfo(Long id, String sumStr,String xin) {
-		if(xin.equals("1")){
-			//重新生成
-			//首先先删除paperinfo表中的对应的试卷中的试题
-			Map<String,Object> columnMap = new HashMap<String,Object>();
-			columnMap.put("paperid", id);
-			paperInfoMapper.deleteByMap(columnMap);
-		}
-		//保存试卷和试题信息
-		savePaperInfo(id, sumStr,null);
-	}
+
 
 	@Override
 	public void duplicateExamPaper(Long pid, Long eid) {
@@ -114,71 +97,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		examPaperMapper.duplicateExamPaper(map);
 	}
 
-	/**
-	 * 保存试卷和试题信息
-	 * @param id
-	 * @param sumStr
-	 * @param infoIdList 原来试卷中试题
-	 */
-	private void savePaperInfo(Long id,String sumStr,List<Long> infoIdList){
-		//抽取试题
-		if(StringUtils.isNotBlank(sumStr)){
-			// 初始化随机数  
-	        //Random rand = new Random();  
-			//分割科目id#对应抽取的数量
-			String [] typeIdAndSums = sumStr.split(";");
-			for (String typeIdAndSum : typeIdAndSums) {
-				String[] typeIds = typeIdAndSum.split("#");
-				//分割科目id 并随机抽取(数量)的试题
-				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("topictype", typeIds[0]);
-				if(StringUtils.isNotBlank(typeIds[1])){
-					map.put("sum", Integer.valueOf(typeIds[1]));
-				}
-				List<TopicInfo> infoList = topicInfoMapper.selectInfoByTypeIdAndSum(map);
-				//获取该科目中待选取的试题
-//				Map<String,Object> columnMap = new HashMap<String,Object>();
-//				columnMap.put("topictype", typeIds[0]);
-//				List<TopicInfo> list = topicInfoMapper.selectByMap(columnMap);
-//				
-//				List<Long> idList = new ArrayList<Long>();
-//				for (TopicInfo topicInfo : list) {
-//					if(infoIdList!=null){//去掉试卷中原有的试题
-//						if(!infoIdList.contains(topicInfo.getId())){
-//							idList.add(topicInfo.getId());
-//						}
-//					}else{
-//						idList.add(topicInfo.getId());
-//					}
-//				}
-//				if(StringUtils.isNotBlank(typeIds[1])){
-//					int size = Integer.valueOf(typeIds[1]);
-//					if(size>idList.size()){//如果抽取的数量大于剩余数量,使用该科目的总题数
-//						idList = new ArrayList<Long>();
-//						for (TopicInfo info : list) {
-//							idList.add(info.getId());
-//						}
-//					}
-//					//随机抽取sum道题
-//					for(int i=0;i<size;i++){
-//						int myRand = rand.nextInt(idList.size());
-//						Long infoId = idList.get(myRand);
-//						PaperInfo info = new PaperInfo();
-//						info.setPaperid(id);
-//						info.setInfoid(infoId);
-//						paperInfoMapper.insert(info);
-//					}
-//				}
-				//保存试题
-				for (TopicInfo topicInfo : infoList) {
-					PaperInfo info = new PaperInfo();
-					info.setPaperid(id);
-					info.setInfoid(topicInfo.getId());
-					paperInfoMapper.insert(info);
-				}
-			}
-		}
-	}
+
 	/**
 	 * 智能组卷回调的datagrid方法
 	 */
@@ -337,6 +256,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 		List<ExamPaper> list = examPaperMapper.findExamPaperByMap(map);
 		if(list!=null && list.size()>0){
 			Long classid = list.get(0).getClassid();
+			Long paperinfoid = list.get(0).getPaperinfoid();
 			//获取学生的id
 //			Student stu = new Student();
 //			stu.setStuno(stuno);
@@ -356,6 +276,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 					if(recordList.get(0).getState()==0){
 						returnMap.put("flag", true);
 						returnMap.put("id", recordList.get(0).getId());
+						returnMap.put("paperinfoid", paperinfoid);
 					}
 				}else{
 					//注:在考试记录插入一条数据,防止重复登录
@@ -368,6 +289,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 					examRecordMapper.insertExamRecord(examRecord);//插入
 					returnMap.put("flag", true);
 					returnMap.put("id", examRecord.getId());
+					returnMap.put("paperinfoid", paperinfoid);
 				}
 			}
 		}
@@ -378,12 +300,13 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper,ExamPaper>
 	 * @return
 	 */
 	@Override
-	public Map<String, Object> selectQuestionMap(Long paperId) {
+	public Map<String, Object> selectQuestionMap(Long paperId,Long paperinfoid) {
 		List<Question> questionList= new ArrayList<Question>();
 		Map<Integer,Integer> questionIdTopicIdMap = new HashMap<Integer,Integer>();
 		//根据试卷id获取试题内容
 		Map<String,Object> columnMap = new HashMap<String,Object>();
 		columnMap.put("paperId", paperId);
+		columnMap.put("paperinfoid", paperinfoid);
 		List<TopicInfo> topicInfoList = topicInfoMapper.selectInfoByMap(columnMap);
 		//将所有的知识点封装到试题列表中
 		for (int i = 0; i < topicInfoList.size(); i++) {

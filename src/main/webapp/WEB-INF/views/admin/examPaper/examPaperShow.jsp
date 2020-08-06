@@ -3,6 +3,8 @@
 <script type="text/javascript">
 var examTypeDataGrid;
 var paperInfoDataGrid;
+var id=0;
+var paperid=0;
 $(function(){
 	examTypeDataGrid = $('#examTypeDataGrid').datagrid({
 	    <%--url : '${path}/topicTypes/data?stage=${examPaper.stage}',--%>
@@ -56,9 +58,25 @@ $(function(){
 			});
 		}
 	});
+
+	$("#papername").combobox({
+        url:'${path}/paperBank/dataGridBank',
+        valueField:'id',
+        textField:'papername',
+        panelHeight:'auto',
+        editable:false,
+        onChange:function (newValue,oldValue) {
+            $("#papernameval").val(newValue);
+            var url='${path}/examPaper/paperInfoDataGrid?id='+newValue;
+            paperInfoDataGrid.datagrid("options").url=url;
+            paperInfoDataGrid.datagrid('reload');
+        }
+    });
+
+
 	
 	paperInfoDataGrid = $('#paperInfoDataGrid').datagrid({
-        url : '${path}/examPaper/paperInfoDataGrid?id=${examPaper.id}',
+        url : '${path}/examPaper/paperInfoDataGrid?id='+paperid,
         fit : true,
         striped : true,
         rownumbers : true,
@@ -128,6 +146,7 @@ function escape4html(str){
 }
 //生成试卷
 function examPaperMakeFun(){
+    var id=$("#papername").combobox('getValue');
 	var datagridRows = examTypeDataGrid.datagrid("getRows");
 	var sum=0;
 	var inputsums = $("input[name='inputsum']");
@@ -146,41 +165,41 @@ function examPaperMakeFun(){
 		$.messager.show({title:'提示',msg:'请输入抽取数量'});
 		return false;
 	}
-	var xin = $("input[type='radio']:checked").val();
-	var num = 0;
-	if(xin=="0"){//新增
-		var total = paperInfoDataGrid.datagrid('getData').total;
-		sum += total;
-	}
-	if(sum>Number("${examPaper.number}")){
-		$.messager.show({title:'提示',msg:'抽取数量大于试题数量'});
-		return false;
-	}
+	if ($("#papername").combobox('getValue')==null){
+        $.messager.show({title:'提示',msg:'请填入试卷名称'});
+        return false;
+    }
+
+	// var num = 0;
+	// if(xin=="0"){//新增
+	// 	var total = paperInfoDataGrid.datagrid('getData').total;
+	// 	sum += total;
+	// }
+
 	if(sumStr.length=!0){
 		$("#sumStr").val(sumStr);
-		xin = xin=="0"?"新增":"重新生成";
-		if(confirm("你选中了"+xin+"操作,确认吗?")){
-			$('#examPaperMakeForm').form({
-	            url : '${path}/examPaper/make?id=${examPaper.id}',
-	            onSubmit : function() {
-	            },
-	            success : function(result) {
-	            	result = $.parseJSON(result);
-	            	if (result.success) {
-	                	$.messager.show({title:'提示',msg:result.msg});
-	                    //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
-	                    examTypeDataGrid.datagrid('reload');
-	                    paperInfoDataGrid.datagrid('reload');
-	                   // parent.$.modalDialog.handler.dialog('close');
-	                } else {
-	                    var form = $('#examPaperMakeForm');
-	                    //parent.$.messager.alert('错误', eval(result.msg), 'error');
-	                }
-	            }
-	        });
-			$('#examPaperMakeForm').submit(); 
-		}
-	}
+        $('#examPaperMakeForm').form({
+            url : '${path}/paperBank/make?paperid='+id,
+            onSubmit : function() {
+            },
+            success : function(result) {
+                result = $.parseJSON(result);
+                if (result.success) {
+                    $.messager.show({title:'提示',msg:result.msg});
+                    //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    paperInfoDataGrid.datagrid('reload');
+                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                   // parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    var form = $('#examPaperMakeForm');
+                    //parent.$.messager.alert('错误', eval(result.msg), 'error');
+                }
+            }
+        });
+
+        $('#examPaperMakeForm').submit();
+        $.messager.show({title:'提示',msg:'操作成功'});
+    }
 }
 
 /**
@@ -226,20 +245,14 @@ function examPaperMakeFun(){
 <%--            		</td>--%>
                     <th style="font-size:16px;">试卷名称:</th>
                     <td style="font-size:16px;width:auto;padding-right:100px;">
-                    	${examPaper.title}
+                    	<input type="text" id="papername"/>
                     </td>
-                    <th style="font-size:16px;">试题数量:</th>
-                    <td style="font-size:16px;width:auto;padding-right:100px;">
-                    	${examPaper.number}
-                    </td>
+
                     <th>&nbsp;&nbsp;</th>
                     <td style="width:100px;">
                     	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true,size:'large'" onclick="examPaperMakeFun();">生成试卷</a>
                     </td>
-                    <td style="font-size:16px;">  
-                        <input type="radio" name="xin" value="0"/>新增&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="xin" value="1" checked="checked"/>重新生成
-                    </td>
+
                 </tr>
             </table>
         </form>

@@ -35,9 +35,10 @@
     	select t.id,t.topicname,t.correct,t.score,t.type from topic_info t
 		left join paper_info p on p.infoid = t.id
 		<where>
-			<if test="paperId!=null">
-				p.paperid = #{paperId}
+			<if test="paperinfoid!=null">
+				and p.paperid = #{paperinfoid}
 			</if>
+
 		</where>
     </select>
 </mapper>

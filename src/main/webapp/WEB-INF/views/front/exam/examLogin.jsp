@@ -47,15 +47,15 @@
 			</h1>
 			<br/>
 			<div class="selecttext">
-				阶段
-				<select id="stage" name="stage" style="width:25%;height:35px;">
-					<option value="">请选择</option>
-					<option value="S1">S1</option>
-					<option value="S2">S2</option>
-					<option value="S3">S3</option>
-				</select>
-				试&nbsp;&nbsp;&nbsp;&nbsp;卷
-				<select id="examPaper"  name="examPaperId" style="width:45%;height:35px;">
+<%--				阶段--%>
+<%--				<select id="stage" name="stage" style="width:25%;height:35px;">--%>
+<%--					<option value="">请选择</option>--%>
+<%--					<option value="S1">S1</option>--%>
+<%--					<option value="S2">S2</option>--%>
+<%--					<option value="S3">S3</option>--%>
+<%--				</select>--%>
+				试卷
+				<select id="examPaper"  name="examPaperId" style="width:85%;height:35px;">
 					<option value="">请选择试卷</option>
 			 	</select>
 			 </div>
@@ -87,11 +87,11 @@
 			 $("#examPaper").html("<option value=''>请选择试卷</option>");
 		 });
 		//阶段选择事件
-		$("#stage").on("change",function(){
-			var stageVal = $(this).val();
+		$("input[type='radio'][name='type']").on("change",function(){
+			// var stageVal = $(this).val();
 			var typeVal = $("input[name='type']:checked").val();
-			if(stageVal!=""){
-				$.post("selectExamPaperList",{type:typeVal,stage:stageVal},function(data){
+			if(typeVal!=""){
+				$.post("selectExamPaperList",{type:typeVal},function(data){
 					var optionStr="";
 					for(var i=0;i<data.length;i++){
 						optionStr+="<option value='"+data[i].code+"'>"+data[i].name+"</option>";

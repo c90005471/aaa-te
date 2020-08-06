@@ -89,6 +89,43 @@ $(function(){
             	return escape4html(value);
             }
         },{
+            width : '50',
+            title : '答案',
+            field : 'correct',
+            sortable : true
+        },{
+            width : '150',
+            title : '选项A',
+            field : 'optiona',
+            sortable : true,
+            formatter:function(value,row,index){
+                return escape4html(value);
+            }
+        },{
+            width : '150',
+            title : '选项B',
+            field : 'optionb',
+            sortable : true,
+            formatter:function(value,row,index){
+                return escape4html(value);
+            }
+        },{
+            width : '150',
+            title : '选项C',
+            field : 'optionc',
+            sortable : true,
+            formatter:function(value,row,index){
+                return escape4html(value);
+            }
+        },{
+            width : '150',
+            title : '选项D',
+            field : 'optiond',
+            sortable : true,
+            formatter:function(value,row,index){
+                return escape4html(value);
+            }
+        },{
             field : 'action',
             title : '操作',
             width : 60,

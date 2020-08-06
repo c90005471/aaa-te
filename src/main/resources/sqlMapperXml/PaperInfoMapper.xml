@@ -2,13 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.aaa.mapper.PaperInfoMapper">
     <select id="selectPaperInfoPage" resultType="Map">
-        select  t.id,p.topicname from paper_info t
+        select
+        t.id,
+        p.topicname,
+        p.correct,
+        t.infoid,
+        (select to3.`option` from topic_option to3 where to3.infoid=t.infoid and to3.optionnum='A')optiona,
+        (select to3.`option` from topic_option to3 where to3.infoid=t.infoid and to3.optionnum='B')optionb,
+        (select to3.`option` from topic_option to3 where to3.infoid=t.infoid and to3.optionnum='C')optionc,
+        (select to3.`option` from topic_option to3 where to3.infoid=t.infoid and to3.optionnum='D')optiond
+        from paper_info t
         left join topic_info p on p.id = t.infoid
+        left join topic_option to2 on to2.infoid=p.id
         <where>
         	<if test="paperid!=null">
         		t.paperid = #{paperid}
         	</if>
         </where>
+        group by t.infoid
         order by t.id
     </select>
     <select id="selectQuestionInfoPage" resultType="Map">
@@ -18,4 +29,5 @@
     <select id="selectPaperInfo" resultType="Map" parameterType="Map">
         select  * from paper_info where paperid = #{paperid} and infoid = #{infoid}
     </select>
+
 </mapper>
